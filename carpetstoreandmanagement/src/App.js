@@ -23,7 +23,7 @@ function App() {
   return (
     <AuthContext.Provider value={isAuth}>
       <div>
-        <Header isAuth={isAuth} />
+        <Header isAuth={isAuth} setIsAuth={setIsAuth}/>
         <main style={{ minHeight: "517px" }}>
           <Routes>
             <Route path='/register' element={<Register />} />
