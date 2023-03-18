@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase'
 
 
-export const Header = ({ isAuth, setIsAuth, setIsAdmin }) => {
+export const Header = ({ isAuth, setIsAuth, setIsAdmin, isAdmin }) => {
     let navigate = useNavigate();
     const signUserOut = () => {
         signOut(auth)
@@ -64,6 +64,25 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin }) => {
                                         </li>
                                     </ul>
                                 </li>
+                                {isAdmin &&
+                                    <>
+                                        <li className="active">
+                                            <Link to="/create">
+                                                Create design<span className="sr-only"></span>
+                                            </Link>
+                                        </li>
+                                        <li className="active">
+                                            <Link to="/inventory">
+                                                Inventory <span className="sr-only"></span>
+                                            </Link>
+                                        </li>
+                                        <li className="active">
+                                            <Link to="/produce">
+                                                Produce <span className="sr-only"></span>
+                                            </Link>
+                                        </li>
+                                    </>
+                                }
                             </ul>
                             <ul className='right-ul navbar-nav'>
                                 {isAuth ?

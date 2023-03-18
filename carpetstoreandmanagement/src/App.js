@@ -24,7 +24,7 @@ function App() {
   return (
     <AuthContext.Provider value={{isAuth, isAdmin}}>
       <div>
-        <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin}/>
+        <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} isAdmin={isAdmin}/>
           <main style={{ minHeight: "517px" }}>
             <Routes>
               <Route path='/register' element={<Register />} />
