@@ -1,24 +1,49 @@
 import style from './Login.Module.css'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth, provider } from '../../firebase'
 import { signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
-export const Login = ({isAuth,setIsAuth }) => {
+export const Login = ({setIsAuth, setIsAdmin }) => {
     let navigate = useNavigate();
+
     const signWithGoogle = () => {
         signInWithPopup(auth, provider)
             .then((result) => {
+                if (result.user.uid == "41ZdJ9N2UggDvyaPCaNlSFt39DB3") {
+                    localStorage.setItem("isAdmin", true);
+                    setIsAdmin(true);
+                }
                 localStorage.setItem("isAuth", true);
                 setIsAuth(true)
                 navigate("/")
-            })
+            });
     };
+
+    const email = useRef(null);
+    const password = useRef(null);
+
+    const onUserLogin = (e) => {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+                .then((result) => {
+                    localStorage.setItem("isAuth", true);
+                    setIsAuth(true)
+                    navigate("/")
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+    }
+
+
 
     return (
         <div className="container">
             <div className="row main">
                 <div className="main-login main-center">
-                    <form className="" method="post" action="#">
+                    <form>
                         <div className="form-group">
                             <label htmlFor="email" className="cols-sm-2 control-label">
                                 Your Email
@@ -34,6 +59,7 @@ export const Login = ({isAuth,setIsAuth }) => {
                                         name="email"
                                         id="email"
                                         placeholder="Enter your Email"
+                                        ref={email}
                                     />
                                 </div>
                             </div>
@@ -53,6 +79,7 @@ export const Login = ({isAuth,setIsAuth }) => {
                                         name="password"
                                         id="password"
                                         placeholder="Enter your Password"
+                                        ref={password}
                                     />
                                 </div>
                             </div>
@@ -60,11 +87,11 @@ export const Login = ({isAuth,setIsAuth }) => {
                     </form>
                     <div className="form-group d-flex justify-content-center">
                         <a
-                            href="https://youtu.be/grvpgbexPEs"
                             target="_blank"
                             type="button"
                             id="button"
                             className="btn btn-primary btn-lg btn-block login-button"
+                            onClick={onUserLogin}
                         >
                             Login
                         </a>

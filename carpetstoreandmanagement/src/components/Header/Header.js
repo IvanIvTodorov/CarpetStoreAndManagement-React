@@ -5,14 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import {auth} from '../../firebase'
 
 
-export const Header = ({ isAuth, setIsAuth }) => {
+export const Header = ({ isAuth, setIsAuth, setIsAdmin }) => {
     let navigate = useNavigate();
     const signUserOut = () => {
         signOut(auth)
             .then(() => {
                 localStorage.clear();
                 setIsAuth(false);
-                navigate("/")
+                setIsAdmin(false);
+                navigate("/");
             })
     }
     

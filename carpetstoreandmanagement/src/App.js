@@ -19,29 +19,29 @@ import { Inventory } from "./components/Inventory/Inventory.js";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   return (
-    <AuthContext.Provider value={isAuth}>
+    <AuthContext.Provider value={{isAuth, isAdmin}}>
       <div>
-        <Header isAuth={isAuth} setIsAuth={setIsAuth}/>
-        <main style={{ minHeight: "517px" }}>
-          <Routes>
-            <Route path='/register' element={<Register />} />
-            <Route path='/login' element={<Login isAuth={isAuth} setIsAuth={setIsAuth} />} />
-            <Route path='/' element={<Home />} />
-            <Route path='/products' element={<Products />} />
-            <Route path='/details' element={<ProductDetail />} />
-            <Route path='/cart' element={<Cart />} />
-            <Route path='/myorders' element={<MyOrders />} />
-            <Route path='/create' element={<Create />} />
-            <Route path='/produce' element={<Produce />} />
-            <Route path='/inventory' element={<Inventory />} />
-          </Routes>
-        </main>
+        <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin}/>
+          <main style={{ minHeight: "517px" }}>
+            <Routes>
+              <Route path='/register' element={<Register />} />
+              <Route path='/login' element={<Login setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />} />
+              <Route path='/' element={<Home />} />
+              <Route path='/products' element={<Products />} />
+              <Route path='/details' element={<ProductDetail />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/myorders' element={<MyOrders />} />
+              <Route path='/create' element={<Create />} />
+              <Route path='/produce' element={<Produce />} />
+              <Route path='/inventory' element={<Inventory />} />
+            </Routes>
+          </main>
         <Footer />
       </div> 
     </AuthContext.Provider>
-
   );
 }
 
