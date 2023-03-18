@@ -2,7 +2,7 @@ import style from './Header.Module.css';
 import { Link } from 'react-router-dom'
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import {auth} from '../../firebase'
+import { auth } from '../../firebase'
 
 
 export const Header = ({ isAuth, setIsAuth, setIsAdmin }) => {
@@ -16,7 +16,7 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin }) => {
                 navigate("/");
             })
     }
-    
+
     return (
         <div id="menu_area" className="menu-area">
             <div className="container">
@@ -64,6 +64,8 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin }) => {
                                         </li>
                                     </ul>
                                 </li>
+                            </ul>
+                            <ul className='right-ul navbar-nav'>
                                 {isAuth ?
                                     <li>
                                         <Link to="#" type='button' onClick={signUserOut}>Logout</Link>

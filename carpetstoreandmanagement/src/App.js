@@ -18,8 +18,8 @@ import { Inventory } from "./components/Inventory/Inventory.js";
 
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isAuth, setIsAuth] = useState(localStorage.getItem('isAuth'))
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem('isAdmin'))
 
   return (
     <AuthContext.Provider value={{isAuth, isAdmin}}>
