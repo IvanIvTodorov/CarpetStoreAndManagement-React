@@ -1,7 +1,18 @@
+import { Routes, Route } from "react-router-dom"
+
+import 'bootstrap/dist/css/bootstrap.css';
+import { Header } from "./components/Header/Header";
 
 function App() {
   return (
-    <div className="App">
+    <div>
+      <Header />
+      <main>
+        <Routes>
+
+
+        </Routes>
+      </main>
     </div>
   );
 }
