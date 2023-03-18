@@ -1,8 +1,8 @@
 import style from './Header.Module.css';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
-export const Header = () => {
+export const Header = ({ isAuth }) => {
     return (
         <div id="menu_area" className="menu-area">
             <div className="container">
@@ -50,15 +50,20 @@ export const Header = () => {
                                         </li>
                                     </ul>
                                 </li>
-                                <li>
-                                    <Link to="/login">Login</Link>
-                                </li>
-                                <li>
-                                    <Link to="/register">Register</Link>
-                                </li>
-                                <li>
-                                    <Link to="#">Logout</Link>
-                                </li>
+                                {isAuth ?
+                                    <li>
+                                        <Link to="#">Logout</Link>
+                                    </li>
+                                    :
+                                    <>
+                                        <li>
+                                            <Link to="/login">Login</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/register">Register</Link>
+                                        </li>
+                                    </>
+                                }
                             </ul>
                         </div>
                     </nav>
