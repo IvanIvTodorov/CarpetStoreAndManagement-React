@@ -1,7 +1,7 @@
 import style from './ProductDetails.Module.css'
-import { useParams, useNavigate } from 'react-router-dom';
-import { db } from '../../firebase';
-import { getDoc, doc, deleteDoc } from 'firebase/firestore';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { db, auth } from '../../firebase';
+import { getDoc, doc, deleteDoc, collection, addDoc, updateDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 export const ProductDetail = ({ isAdmin, setCarpets, carpets }) => {
@@ -25,6 +25,43 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets }) => {
         await deleteDoc(docRef)
         setCarpets(carpets => (carpets.filter(x => x.id != carpetId)))
         navigate('/products')
+    }
+
+
+
+    const addProduct = async (e) => {
+        e.preventDefault();
+        const userId = auth.currentUser.uid;
+        const docRef = doc(db, 'userProducts', userId);
+        const data = await (await getDoc(docRef)).data();
+
+        if (!data) {
+            await setDoc(doc(db, 'userProducts', userId), {
+                carpets: {
+                    [carpetId]:
+                    {
+                        qty: 1,
+                        imgUrl: carpet.imgUrl,
+                        price: carpet.price
+                    }
+                }
+            })
+                .catch(err => { console.log(err) })
+        } else {
+            if (!data.carpets.hasOwnProperty(carpetId)) {
+                await setDoc(docRef, {
+                    carpets: {
+                        [carpetId]:
+                        {
+                            qty: 1,
+                            imgUrl: carpet.imgUrl,
+                            price: carpet.price
+                        }
+                    }
+                }, { merge: true })
+                    .catch(err => { console.log(err) })
+            }
+        }
     }
 
     return (
@@ -58,16 +95,16 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets }) => {
                             <hr />
                             {!isAdmin ?
                                 <div className="action">
-                                    <button className="add-to-cart btn btn-default" type="button">
+                                    <button onClick={addProduct} className="add-to-cart btn btn-default" type="button">
                                         Add to cart
                                     </button>
                                 </div>
                                 :
                                 <div className="action">
                                     <div className='d-flex justify-content-between'>
-                                        <button style={{ border: 'solid black', marginLeft: '50px' }} className="add-to-cart btn " type="button">
+                                        <Link to={{ pathname: `/edit/${carpetId}` }} style={{ border: 'solid black', marginLeft: '50px' }} className="add-to-cart btn" type="button">
                                             Edit
-                                        </button>
+                                        </Link>
                                         <button style={{ border: 'solid black', marginRight: '50px' }} className="add-to-cart btn" type="button" onClick={onDelete}>
                                             Delete
                                         </button>

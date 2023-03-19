@@ -63,6 +63,11 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin, isAdmin }) => {
                                         </li>
                                     </ul>
                                 </li>
+                                <li className="active">
+                                    <Link to="/cart">
+                                        My cart <span className="sr-only"></span>
+                                    </Link>
+                                </li>
                                 {isAdmin &&
                                     <>
                                         <li className="active">

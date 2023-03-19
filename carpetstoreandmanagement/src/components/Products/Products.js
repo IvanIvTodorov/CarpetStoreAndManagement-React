@@ -9,15 +9,14 @@ export const Products = ({ carpets, isAdmin }) => {
 
     if (path[2] == 'paths') {
         carpets = carpets.filter(carpet => carpet.type.toLowerCase() == 'path');
-    }else if (path[2] == 'carpets')
-    {
+    } else if (path[2] == 'carpets') {
         carpets = carpets.filter(carpet => carpet.type.toLowerCase() == 'carpet');
     }
 
     return (
         <div className='container'>
             <div className="row">
-                {carpets.map((carpet) => {
+                {carpets.length > 0 ? carpets.map((carpet) => {
                     return <div key={carpet.id} className="col-md-3 col-sm-6">
                         <div className="product-grid2">
                             <div className="product-image2">
@@ -45,7 +44,10 @@ export const Products = ({ carpets, isAdmin }) => {
                             </div>
                         </div>
                     </div>
-                })}
+                })
+                    :
+                    <h1 style={{textAlign: 'center'}}>We are adding designs at the moment !</h1>
+                }
             </div>
         </div>
     )
