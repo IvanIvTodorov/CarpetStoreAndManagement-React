@@ -53,10 +53,10 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin, isAdmin }) => {
                                     </Link>
                                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li>
-                                            <Link to="/products">Carpets</Link>
+                                            <Link to="/products/carpets">Carpets</Link>
                                         </li>
                                         <li>
-                                            <Link to="/products">Paths</Link>
+                                            <Link to="/products/paths">Paths</Link>
                                         </li>
                                         <li>
                                             <Link to="/products">All</Link>

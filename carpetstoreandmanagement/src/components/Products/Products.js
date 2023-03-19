@@ -1,8 +1,19 @@
 import style from './Products.Module.css'
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 export const Products = ({ carpets, isAdmin }) => {
+    const location = useLocation();
+    const path = location.pathname.split('/');
+
+    if (path[2] == 'paths') {
+        carpets = carpets.filter(carpet => carpet.type.toLowerCase() == 'path');
+    }else if (path[2] == 'carpets')
+    {
+        carpets = carpets.filter(carpet => carpet.type.toLowerCase() == 'carpet');
+    }
+
     return (
         <div className='container'>
             <div className="row">

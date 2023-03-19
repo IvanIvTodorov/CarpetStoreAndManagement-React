@@ -1,10 +1,10 @@
 import style from './Create.Module.css'
 import { useEffect, useRef } from 'react';
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 
-export const Create = ({ isAdmin, isAuth }) => {
+export const Create = ({ isAdmin, isAuth,setCarpets }) => {
     const name = useRef(null);
     const type = useRef(null);
     const price = useRef(null);
@@ -19,7 +19,9 @@ export const Create = ({ isAdmin, isAuth }) => {
             type: type.current.value,
             price: price.current.value,
             imgUrl: imgUrl.current.value
-        }).then(() => {
+        }).then(async () => {
+            const data = await getDocs(carpetCollection)
+            setCarpets(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
             navigate('/products')
         })
     }

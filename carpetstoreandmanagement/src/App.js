@@ -45,11 +45,13 @@ function App() {
               <Route path='/login' element={<Login setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />} />
               <Route path='/' element={<Home />} />
               <Route path='/products' element={<Products carpets={carpets} isAdmin={isAdmin}/>} />
+              <Route path='/products/paths' element={<Products carpets={carpets} isAdmin={isAdmin}/>} />
+              <Route path='/products/carpets' element={<Products carpets={carpets} isAdmin={isAdmin}/>} />
               <Route path='/details/:carpetId' element={<ProductDetail isAdmin={isAdmin}/>} />
               <Route path='/edit/:carpetId' element={<Edit setCarpets={setCarpets}/>} />
               <Route path='/cart' element={<Cart />} />
               <Route path='/myorders' element={<MyOrders />} />
-              <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth}/>} />
+              <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth} setCarpets={setCarpets}/>} />
               <Route path='/produce' element={<Produce />} />
               <Route path='/inventory' element={<Inventory />} />
             </Routes>
