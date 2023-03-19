@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom"
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { AuthContext } from "./contexts/AuthContext.js";
+import { getDocs, collection } from 'firebase/firestore'
+import { db } from './firebase';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import { Footer } from './components/Footer/Footer.js';
@@ -15,11 +17,23 @@ import { MyOrders } from "./components/Order/MyOrders.js";
 import { Create } from "./components/Create/Create.js";
 import { Produce } from "./components/Produce/Produce.js";
 import { Inventory } from "./components/Inventory/Inventory.js";
+import { Edit } from "./components/Edit/Edit.js";
 
 
 function App() {
   const [isAuth, setIsAuth] = useState(localStorage.getItem('isAuth'))
   const [isAdmin, setIsAdmin] = useState(localStorage.getItem('isAdmin'))
+  const [carpets, setCarpets] = useState([])
+
+    const carpetCollection = collection(db, 'carpet')
+    useEffect(() => {
+        const getCarpets = async () => {
+            const data = await getDocs(carpetCollection)
+            setCarpets(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        }
+
+        getCarpets();
+    }, [])
 
   return (
     <AuthContext.Provider value={{isAuth, isAdmin}}>
@@ -30,8 +44,9 @@ function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />} />
               <Route path='/' element={<Home />} />
-              <Route path='/products' element={<Products />} />
-              <Route path='/details' element={<ProductDetail />} />
+              <Route path='/products' element={<Products carpets={carpets} isAdmin={isAdmin}/>} />
+              <Route path='/details/:carpetId' element={<ProductDetail isAdmin={isAdmin}/>} />
+              <Route path='/edit/:carpetId' element={<Edit setCarpets={setCarpets}/>} />
               <Route path='/cart' element={<Cart />} />
               <Route path='/myorders' element={<MyOrders />} />
               <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth}/>} />
