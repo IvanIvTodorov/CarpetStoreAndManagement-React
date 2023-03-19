@@ -47,7 +47,7 @@ function App() {
               <Route path='/products' element={<Products carpets={carpets} isAdmin={isAdmin}/>} />
               <Route path='/products/paths' element={<Products carpets={carpets} isAdmin={isAdmin}/>} />
               <Route path='/products/carpets' element={<Products carpets={carpets} isAdmin={isAdmin}/>} />
-              <Route path='/details/:carpetId' element={<ProductDetail isAdmin={isAdmin}/>} />
+              <Route path='/details/:carpetId' element={<ProductDetail isAdmin={isAdmin} setCarpets={setCarpets} carpets={carpets}/>} />
               <Route path='/edit/:carpetId' element={<Edit setCarpets={setCarpets}/>} />
               <Route path='/cart' element={<Cart />} />
               <Route path='/myorders' element={<MyOrders />} />

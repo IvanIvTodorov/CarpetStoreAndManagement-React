@@ -1,15 +1,15 @@
 import style from './ProductDetails.Module.css'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
-
-export const ProductDetail = ({isAdmin}) => {
+export const ProductDetail = ({ isAdmin, setCarpets, carpets }) => {
     const [carpet, setCarpet] = useState({})
     const { carpetId } = useParams();
 
     const docRef = doc(db, 'carpet', carpetId);
+    let navigate = useNavigate();
 
     useEffect(() => {
         const getCarpet = async () => {
@@ -19,6 +19,13 @@ export const ProductDetail = ({isAdmin}) => {
 
         getCarpet();
     }, [])
+
+    const onDelete = async (e) => {
+        e.preventDefault();
+        await deleteDoc(docRef)
+        setCarpets(carpets => (carpets.filter(x => x.id != carpetId)))
+        navigate('/products')
+    }
 
     return (
         <div className="container">
@@ -57,11 +64,16 @@ export const ProductDetail = ({isAdmin}) => {
                                 </div>
                                 :
                                 <div className="action">
-                                <button className="add-to-cart btn btn-default" type="button">
-                                    Edit
-                                </button>
+                                    <div className='d-flex justify-content-between'>
+                                        <button style={{ border: 'solid black', marginLeft: '50px' }} className="add-to-cart btn " type="button">
+                                            Edit
+                                        </button>
+                                        <button style={{ border: 'solid black', marginRight: '50px' }} className="add-to-cart btn" type="button" onClick={onDelete}>
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
-                            }                          
+                            }
                         </div>
                     </div>
                 </div>
