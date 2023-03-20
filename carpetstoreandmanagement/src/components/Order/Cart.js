@@ -3,7 +3,7 @@ import { db, auth } from "../../firebase"
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
-export const Cart = ({setUserProducts, userProducts}) => {
+export const Cart = ({ setUserProducts, userProducts }) => {
 
     useEffect(() => {
         const getCarpets = async () => {
@@ -36,17 +36,49 @@ export const Cart = ({setUserProducts, userProducts}) => {
             [`carpets.${carpetId}`]: deleteField()
         });
 
-        
+        const curInformation = await getDoc(document);
         if (information.data()) {
-            setUserProducts(Object.entries(information.data().carpets).map((carpet => {
+            setUserProducts(Object.entries(curInformation.data().carpets).map((carpet => {
                 return {
                     id: carpet[0],
                     ...carpet[1]
                 }
             })));
         }
-
     }
+
+    const increaseAmount = async (value, carpetId) => {
+        if (value.target.value <= 0) {
+            alert("The qty must be higher than 0 !!!")
+            value.target.value = 1;
+        }
+
+        const userId = auth.currentUser.uid;
+        const document = doc(db, 'userProducts', userId);
+        const information = await getDoc(document);
+
+        updateDoc(document, {
+            [`carpets.${carpetId}.qty`]: value.target.value
+        });
+
+        const currentInf = await getDoc(document);
+
+        const carpet = userProducts.map(y => {
+            if (y.id === carpetId) {
+                return {
+                    id: y.id,
+                    qty: value.target.value,
+                    price: y.price,
+                    imgUrl: y.imgUrl
+                }
+            }
+
+            return y
+        });
+
+        await setUserProducts(carpet)
+    }
+
     if (userProducts.length > 0) {
         return (
             <div className="container" style={{ minHeight: '567px' }}>
@@ -56,6 +88,7 @@ export const Cart = ({setUserProducts, userProducts}) => {
                             <thead>
                                 <tr>
                                     <th>Product</th>
+                                    <th>Name</th>
                                     <th>Quantity</th>
                                     <th className="text-center">Price</th>
                                     <th className="text-center">Total</th>
@@ -65,7 +98,7 @@ export const Cart = ({setUserProducts, userProducts}) => {
                             <tbody>
                                 {userProducts.map((carpet) => {
                                     return <tr key={carpet.id}>
-                                        <td className="col-sm-8 col-md-6">
+                                        <td className="col-sm-1 col-md-1">
                                             <div className="media">
                                                 <a className="thumbnail pull-left" href="#">
                                                     {" "}
@@ -77,19 +110,20 @@ export const Cart = ({setUserProducts, userProducts}) => {
                                                 </a>
                                             </div>
                                         </td>
+                                        <td className="col-sm-8 col-md-6"><span>{carpet.name}</span></td>
                                         <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
                                             <input
-                                                type="email"
+                                                type="number"
                                                 className="form-control"
-                                                id="exampleInputEmail1"
                                                 defaultValue={carpet.qty}
+                                                onChange={value => increaseAmount(value, carpet.id)}
                                             />
                                         </td>
                                         <td className="col-sm-1 col-md-1 text-center">
                                             <strong>${carpet.price}</strong>
                                         </td>
                                         <td className="col-sm-1 col-md-1 text-center">
-                                            <strong>$14.61</strong>
+                                            <strong>${Number(carpet.price) * Number(carpet.qty)}</strong>
                                         </td>
                                         <td className="col-sm-1 col-md-1">
                                             <button onClick={e => deleteItem(e, carpet.id)} type="button" className="btn btn-danger">
@@ -101,12 +135,13 @@ export const Cart = ({setUserProducts, userProducts}) => {
                                 <tr>
                                     <td> &nbsp; </td>
                                     <td> &nbsp; </td>
+                                    <td> &nbsp; </td>
                                     <td>
-                                        <h3>Total:</h3>
+                                        <h3>Total: </h3>
                                     </td>
                                     <td className="text-right">
                                         <h3>
-                                            <strong>$31.53</strong>
+                                            <strong>${userProducts.map(x => +x.qty * +x.price).reduce((a,b) => a + b, 0)}</strong>
                                         </h3>
                                     </td>
                                     <td>

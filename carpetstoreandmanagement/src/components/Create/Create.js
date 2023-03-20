@@ -14,7 +14,7 @@ export const Create = ({ isAdmin, isAuth,setCarpets }) => {
 
     const onPost = async (e) => {
         e.preventDefault();
-        await addDoc(carpetCollection, {
+        addDoc(carpetCollection, {
             name: name.current.value,
             type: type.current.value,
             price: price.current.value,
