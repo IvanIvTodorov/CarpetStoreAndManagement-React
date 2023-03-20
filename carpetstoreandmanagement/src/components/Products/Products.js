@@ -1,16 +1,73 @@
 import style from './Products.Module.css'
 import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import { auth, db } from '../../firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import {useState } from 'react';
 
 
-export const Products = ({ carpets, isAdmin }) => {
+export const Products = ({ carpets, isAdmin, setUserProducts}) => {
+    const [carpet, setCarpet] = useState({})
+
     const location = useLocation();
     const path = location.pathname.split('/');
+
+
 
     if (path[2] == 'paths') {
         carpets = carpets.filter(carpet => carpet.type.toLowerCase() == 'path');
     } else if (path[2] == 'carpets') {
         carpets = carpets.filter(carpet => carpet.type.toLowerCase() == 'carpet');
+    }
+
+    const addProduct = async (e, carpetId) => {
+        e.preventDefault();
+        const docRef2 = doc(db, 'carpet', carpetId);
+        const data2 = await getDoc(docRef2);
+        const carpet = data2.data();
+
+        const userId = auth.currentUser.uid;
+        const docRef = doc(db, 'userProducts', userId);
+        const data = await (await getDoc(docRef)).data();
+
+        
+        if (!data || Object.keys(data) == 0) {
+            await setDoc(doc(db, 'userProducts', userId), {
+                carpets: {
+                    [carpetId]:
+                    {
+                        qty: 1,
+                        imgUrl: carpet.imgUrl,
+                        price: carpet.price
+                    }
+                }
+            })
+            .catch(err => { console.log(err) })
+
+        } else {
+            if (!data.carpets.hasOwnProperty(carpetId)) {
+                await setDoc(docRef, {
+                    carpets: {
+                        [carpetId]:
+                        {
+                            qty: 1,
+                            imgUrl: carpet.imgUrl,
+                            price: carpet.price
+                        }
+                    }
+                }, { merge: true })
+                    .catch(err => { console.log(err) })
+            }
+        }
+
+        if (data) {
+            setUserProducts(Object.entries(data.carpets).map((carpet => {
+                return {
+                    id: carpet[0],
+                    ...carpet[1]
+                }
+            })));
+        }
     }
 
     return (
@@ -30,7 +87,7 @@ export const Products = ({ carpets, isAdmin }) => {
                                         Edit
                                     </Link>
                                     :
-                                    <Link className="add-to-cart" to="">
+                                    <Link onClick={e => addProduct(e, carpet.id)} className="add-to-cart" to="">
                                         Add to cart
                                     </Link>
                                 }

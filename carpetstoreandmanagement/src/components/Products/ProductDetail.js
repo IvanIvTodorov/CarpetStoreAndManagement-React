@@ -4,7 +4,7 @@ import { db, auth } from '../../firebase';
 import { getDoc, doc, deleteDoc, collection, addDoc, updateDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
-export const ProductDetail = ({ isAdmin, setCarpets, carpets }) => {
+export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts }) => {
     const [carpet, setCarpet] = useState({})
     const { carpetId } = useParams();
 
@@ -35,7 +35,8 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets }) => {
         const docRef = doc(db, 'userProducts', userId);
         const data = await (await getDoc(docRef)).data();
 
-        if (!data) {
+
+        if (!data || Object.keys(data) == 0) {
             await setDoc(doc(db, 'userProducts', userId), {
                 carpets: {
                     [carpetId]:
@@ -61,6 +62,15 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets }) => {
                 }, { merge: true })
                     .catch(err => { console.log(err) })
             }
+        }
+
+        if (data) {
+            setUserProducts(Object.entries(data.carpets).map((carpet => {
+                return {
+                    id: carpet[0],
+                    ...carpet[1]
+                }
+            })));
         }
     }
 
