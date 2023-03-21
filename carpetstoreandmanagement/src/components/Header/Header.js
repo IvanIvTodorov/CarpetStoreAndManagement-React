@@ -64,11 +64,18 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin, isAdmin }) => {
                                     </ul>
                                 </li>
                                 {!isAdmin &&
-                                    <li className="active">
-                                        <Link to="/cart">
-                                            My cart <span className="sr-only"></span>
-                                        </Link>
-                                    </li>
+                                    <>
+                                        <li className="active">
+                                            <Link to="/cart">
+                                                My cart <span className="sr-only"></span>
+                                            </Link>
+                                        </li>
+                                        <li className="active">
+                                            <Link to="/myorders">
+                                                My orders <span className="sr-only"></span>
+                                            </Link>
+                                        </li>
+                                    </>
                                 }
 
                                 {isAdmin &&
@@ -86,6 +93,11 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin, isAdmin }) => {
                                         <li className="active">
                                             <Link to="/produce">
                                                 Produce <span className="sr-only"></span>
+                                            </Link>
+                                        </li>
+                                        <li className="active">
+                                            <Link to="/orders">
+                                                Orders <span className="sr-only"></span>
                                             </Link>
                                         </li>
                                     </>

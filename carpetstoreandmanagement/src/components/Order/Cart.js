@@ -1,10 +1,11 @@
-import { collection, getDoc, getDocs, doc, updateDoc, deleteField } from "firebase/firestore"
+import { collection, getDoc, getDocs, doc, updateDoc, deleteField, setDoc, addDoc, deleteDoc } from "firebase/firestore"
 import { db, auth } from "../../firebase"
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
 export const Cart = ({ setUserProducts, userProducts }) => {
-
+    const navigate = useNavigate();
+    let totalPrice = userProducts.map(x => +x.qty * +x.price).reduce((a,b) => a + b, 0)
     useEffect(() => {
         const getCarpets = async () => {
             const carpetCollection = collection(db, 'userProducts')
@@ -25,7 +26,6 @@ export const Cart = ({ setUserProducts, userProducts }) => {
         getCarpets();
     }, [])
 
-    const navigate = useNavigate();
     const deleteItem = async (e, carpetId) => {
         e.preventDefault();
         const userId = auth.currentUser.uid;
@@ -69,7 +69,8 @@ export const Cart = ({ setUserProducts, userProducts }) => {
                     id: y.id,
                     qty: value.target.value,
                     price: y.price,
-                    imgUrl: y.imgUrl
+                    imgUrl: y.imgUrl,
+                    type: carpet.type
                 }
             }
 
@@ -77,6 +78,24 @@ export const Cart = ({ setUserProducts, userProducts }) => {
         });
 
         await setUserProducts(carpet)
+    }
+
+    const checkoutProducts = async (e, totalPrice) => {
+        e.preventDefault();
+        const userId = auth.currentUser.uid;
+        const ordersCollection = collection(db, 'orders')
+        const document = doc(db, 'userProducts', userId);
+        const currentData = await getDoc(document);
+
+        let addOrder = currentData.data().carpets;
+
+        await addDoc(ordersCollection, {
+            [userId]: {...addOrder}
+        });
+
+        await deleteDoc(document)
+        setUserProducts([])
+        navigate('/myorders')
     }
 
     if (userProducts.length > 0) {
@@ -141,11 +160,11 @@ export const Cart = ({ setUserProducts, userProducts }) => {
                                     </td>
                                     <td className="text-right">
                                         <h3>
-                                            <strong>${userProducts.map(x => +x.qty * +x.price).reduce((a,b) => a + b, 0)}</strong>
+                                            <strong>${totalPrice}</strong>
                                         </h3>
                                     </td>
                                     <td>
-                                        <button type="button" className="btn btn-success">
+                                        <button onClick={e => checkoutProducts(e, totalPrice)} type="button" className="btn btn-success">
                                             Checkout <span className="glyphicon glyphicon-play" />
                                         </button>
                                     </td>

@@ -39,7 +39,8 @@ export const Products = ({ carpets, isAdmin, setUserProducts}) => {
                         qty: 1,
                         imgUrl: carpet.imgUrl,
                         price: carpet.price,
-                        name: carpet.name
+                        name: carpet.name,
+                        type: carpet.type
                     }
                 }
             })
@@ -54,7 +55,8 @@ export const Products = ({ carpets, isAdmin, setUserProducts}) => {
                             qty: 1,
                             imgUrl: carpet.imgUrl,
                             price: carpet.price,
-                            name: carpet.name
+                            name: carpet.name,
+                            type: carpet.type
                         }
                     }
                 }, { merge: true })

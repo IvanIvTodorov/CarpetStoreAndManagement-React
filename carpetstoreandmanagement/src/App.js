@@ -18,6 +18,7 @@ import { Create } from "./components/Create/Create.js";
 import { Produce } from "./components/Produce/Produce.js";
 import { Inventory } from "./components/Inventory/Inventory.js";
 import { Edit } from "./components/Edit/Edit.js";
+import { Orders } from "./components/Order/Orders.js";
 
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
               <Route path='/edit/:carpetId' element={<Edit setCarpets={setCarpets}/>} />
               <Route path='/cart' element={<Cart setUserProducts={setUserProducts} userProducts={userProducts}/>} />
               <Route path='/myorders' element={<MyOrders />} />
+              <Route path='/orders' element={<Orders userProducts={userProducts}/>} />
               <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth} setCarpets={setCarpets}/>} />
               <Route path='/produce' element={<Produce />} />
               <Route path='/inventory' element={<Inventory />} />
