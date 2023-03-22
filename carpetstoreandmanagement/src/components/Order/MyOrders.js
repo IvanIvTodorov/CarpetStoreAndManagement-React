@@ -37,30 +37,24 @@ export const MyOrders = () => {
                                 <th>Type</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
-                                <th>Status</th>
-                            </tr>                           
+                            </tr>
                         </thead>
                         <tbody>
                             {userOrders.map((order, index) => {
-                                console.log(order);
                                 return <>
-                                    {order.map(x => {
-                                        return <tr key={x.id}>
-                                            <td>{x.name}</td>
-                                            <td>{x.type}</td>
-                                            <td>{x.qty}</td>
-                                            <td>{x.price}</td>
-                                            <td>
-                                                <span className="label label-success">In process...</span>
-                                            </td>
-                                        </tr>
-                                    })}
-                                    <td style={{borderTop: "5px solid red"}}></td>
-                                    <td style={{borderTop: "5px solid red"}}></td>
-                                    <td style={{borderTop: "5px solid red"}}></td>
-                                    <td style={{borderTop: "5px solid red"}}></td>
-                                    <td style={{borderTop: "5px solid red"}}></td>
-                                </>                                
+                                    <>
+                                        {order.map(x => {
+                                            return <tr key={x.id}>
+                                                <td>{x.name}</td>
+                                                <td>{x.type}</td>
+                                                <td>{x.qty}</td>
+                                                <td>{x.price}</td>
+                                            </tr>
+                                        })}
+                                    </>
+                                    <tr key={index} style={{ borderTop: "5px solid red" }}>
+                                    </tr>
+                                </>
                             })}
                         </tbody>
                     </table>

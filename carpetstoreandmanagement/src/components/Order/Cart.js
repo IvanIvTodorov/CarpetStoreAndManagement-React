@@ -70,7 +70,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
                     qty: value.target.value,
                     price: y.price,
                     imgUrl: y.imgUrl,
-                    type: carpet.type
+                    type: y.type
                 }
             }
 

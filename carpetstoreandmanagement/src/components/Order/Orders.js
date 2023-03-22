@@ -1,4 +1,8 @@
+import { useState, useEffect } from "react"
+
 export const Orders = ({userProducts}) => {
+    const [orders, setOrders] = useState([])
+
     return (
         <div className="container" style={{ minHeight: '567px' }}>
                 <div className="row d-flex justify-content-center">
