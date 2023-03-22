@@ -87,7 +87,7 @@ export const Products = ({ carpets, isAdmin, setUserProducts}) => {
 
                                 </Link>
                                 {isAdmin ?
-                                    <Link className="add-to-cart" to={{ pathname: `/edit/${carpet.id}` }}>
+                                    <Link  className="add-to-cart" to={{ pathname: `/edit/${carpet.id}` }}>
                                         Edit
                                     </Link>
                                     :

@@ -19,6 +19,7 @@ import { Produce } from "./components/Produce/Produce.js";
 import { Inventory } from "./components/Inventory/Inventory.js";
 import { Edit } from "./components/Edit/Edit.js";
 import { Orders } from "./components/Order/Orders.js";
+import { RawMaterials } from "./components/RawMaterials/RawMaterials.js";
 
 
 function App() {
@@ -36,7 +37,8 @@ function App() {
 
             const carpetCollection2 = collection(db, 'userProducts')
             const data3 = await getDocs(carpetCollection2)
-            const document = doc(db, 'userProducts', auth.currentUser.uid)
+            let userId = auth.currentUser.uid
+            const document = doc(db, 'userProducts', userId)
             const data2 = await getDoc(document);
 
             if (data2.data()) {
@@ -70,8 +72,9 @@ function App() {
               <Route path='/myorders' element={<MyOrders />} />
               <Route path='/orders' element={<Orders userProducts={userProducts}/>} />
               <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth} setCarpets={setCarpets}/>} />
-              <Route path='/produce' element={<Produce />} />
+              <Route path='/produce/:orderId' element={<Produce />} />
               <Route path='/inventory' element={<Inventory />} />
+              <Route path='/rawmaterials' element={<RawMaterials />} />
             </Routes>
           </main>
         <Footer />

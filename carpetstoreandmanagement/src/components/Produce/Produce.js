@@ -1,5 +1,49 @@
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export const Produce = () => {
+    const { orderId } = useParams();
+    const [orderItems, setOrderItems] = useState([]);
+
+    useEffect(() => {
+        const getCarpets = async () => {
+            const docRef = doc(db, "orders", orderId);
+            const document = await getDoc(docRef);
+
+            setOrderItems(Object.values(document.data()).map(x => (Object.values(x).map((z, index) => ({
+                ...z, id: Object.keys(x)[index]
+            })))));
+        }
+
+        getCarpets();
+    }, [])
+
+    const produceItem = async (e, carpetId, qty) => {
+        e.preventDefault();
+        console.log(carpetId);
+        console.log(qty);
+        const ref = doc(db, "inventory", carpetId);
+        const inventoryCarpet = await getDoc(ref);
+
+        console.log(inventoryCarpet.data());
+
+        if (!inventoryCarpet.data()) {
+            console.log('first');
+            await setDoc(doc(db, 'inventory', carpetId), {
+                qty: Number(qty)
+            })
+            .catch(err => { console.log(err) })
+        }else{
+            console.log('second');
+            await setDoc(doc(db, 'inventory', carpetId), {
+                qty: (Number(Object.values(inventoryCarpet.data())[0]) + Number(qty))
+            })
+            .catch(err => { console.log(err) })
+        }    
+    }
+
     return (
         <div className="container" style={{ minHeight: '567px' }}>
             <div className="row d-flex justify-content-center">
@@ -13,60 +57,35 @@ export const Produce = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td className="col-sm-8 col-md-6">
-                                    <div className="media">
-                                        <a className="thumbnail pull-left" href="#">
-                                            {" "}
-                                            <img
-                                                className="media-object"
-                                                src="https://www.shutterstock.com/image-vector/persian-carpet-tribal-vector-texture-260nw-1187898280.jpg"
-                                                style={{ width: 72, height: 72 }}
-                                            />{" "}
-                                        </a>
-                                    </div>
-                                </td>
-                                <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        id="exampleInputEmail1"
-                                        defaultValue={3}
-                                    />
-                                </td>
-                                <td className="col-sm-1 col-md-1">
-                                    <button type="button" className="btn btn-success">
-                                        <span className="glyphicon glyphicon-remove" /> Produce
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="col-sm-8 col-md-6">
-                                    <div className="media">
-                                        <a className="thumbnail pull-left" href="#">
-                                            {" "}
-                                            <img
-                                                className="media-object"
-                                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgYSj-PO6fZ3tXUnpJc71-7JNiy7AZZ2tXLJEQV9OvWaPPWHcNkn6cmJARuzUgItKcu0M&usqp=CAU"
-                                                style={{ width: 72, height: 72 }}
-                                            />{" "}
-                                        </a>
-                                    </div>
-                                </td>
-                                <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        id="exampleInputEmail1"
-                                        defaultValue={3}
-                                    />
-                                </td>
-                                <td className="col-sm-1 col-md-1">
-                                    <button type="button" className="btn btn-success">
-                                        <span className="glyphicon glyphicon-remove" /> Produce
-                                    </button>
-                                </td>
-                            </tr>
+                            {orderItems.map(x => {
+                                return <>
+                                    {x.map(carpet => {
+                                        return <tr key={carpet.id}>
+                                            <td className="col-sm-8 col-md-6">
+                                                <div className="media justify-content-center">
+                                                    <a className="thumbnail pull-left" href="#">
+                                                        {" "}
+                                                        <img
+                                                            className="media-object"
+                                                            src={carpet.imgUrl}
+                                                            style={{ width: 72, height: 72 }}
+                                                        />{" "}
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
+                                                <span>{carpet.qty}</span>
+                                            </td>
+                                            <td className="col-sm-1 col-md-1">
+                                                <button onClick={e => produceItem(e, carpet.id, carpet.qty)} type="button" className="btn btn-success">
+                                                    <span className="glyphicon glyphicon-remove" /> Produce
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    })}
+                                </>
+                            })}
+
                         </tbody>
                     </table>
                 </div>

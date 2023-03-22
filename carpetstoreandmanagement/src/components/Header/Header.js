@@ -100,6 +100,11 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin, isAdmin }) => {
                                                 Orders <span className="sr-only"></span>
                                             </Link>
                                         </li>
+                                        <li className="active">
+                                            <Link to="/rawmaterials">
+                                                RawMaterials <span className="sr-only"></span>
+                                            </Link>
+                                        </li>
                                     </>
                                 }
                             </ul>
