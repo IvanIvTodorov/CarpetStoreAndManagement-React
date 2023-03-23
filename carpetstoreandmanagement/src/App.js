@@ -15,11 +15,12 @@ import { ProductDetail } from "./components/Products/ProductDetail.js";
 import { Cart } from "./components/Order/Cart.js";
 import { MyOrders } from "./components/Order/MyOrders.js";
 import { Create } from "./components/Create/Create.js";
-import { Produce } from "./components/Produce/Produce.js";
+import { ProduceFromOrder } from "./components/Produce/ProduceFromOrder.js";
 import { Inventory } from "./components/Inventory/Inventory.js";
 import { Edit } from "./components/Edit/Edit.js";
 import { Orders } from "./components/Order/Orders.js";
 import { RawMaterials } from "./components/RawMaterials/RawMaterials.js";
+import { Produce } from "./components/Produce/Produce.js";
 
 
 function App() {
@@ -72,7 +73,8 @@ function App() {
               <Route path='/myorders' element={<MyOrders />} />
               <Route path='/orders' element={<Orders userProducts={userProducts}/>} />
               <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth} setCarpets={setCarpets}/>} />
-              <Route path='/produce/:orderId' element={<Produce />} />
+              <Route path='/produce/:orderId' element={<ProduceFromOrder />} />
+              <Route path='/produce/' element={<Produce />} />
               <Route path='/inventory' element={<Inventory />} />
               <Route path='/rawmaterials' element={<RawMaterials />} />
             </Routes>

@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom"
 export const Cart = ({ setUserProducts, userProducts }) => {
     const navigate = useNavigate();
     let totalPrice = userProducts.map(x => +x.qty * +x.price).reduce((a,b) => a + b, 0)
+    
     useEffect(() => {
         const getCarpets = async () => {
             const carpetCollection = collection(db, 'userProducts')
@@ -90,7 +91,8 @@ export const Cart = ({ setUserProducts, userProducts }) => {
         let addOrder = currentData.data().carpets;
 
         await addDoc(ordersCollection, {
-            [userId]: {...addOrder}
+            [userId]: {...addOrder},
+            isCompleted: false
         });
 
         await deleteDoc(document)
