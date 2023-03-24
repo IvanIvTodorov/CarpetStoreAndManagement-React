@@ -17,7 +17,7 @@ export const Produce = () => {
         getCarpets();
     }, [])
 
-    const produceItem = async (e, carpetId, qty) => {
+    const produceItem = async (e, carpetId, qty, carpetName, carpetType) => {
         e.preventDefault();
         const yarnRef = doc(db, 'rawMaterials', 'yarn');
         const yarnDocument = await getDoc(yarnRef);
@@ -45,17 +45,28 @@ export const Produce = () => {
             return;
         }
 
+
         const ref = doc(db, "inventory", carpetId);
         const inventoryCarpet = await getDoc(ref);
 
         if (!inventoryCarpet.data()) {
             await setDoc(doc(db, 'inventory', carpetId), {
-                qty: Number(qty)
+                qty: Number(qty),
+                name: carpetName,
+                type: carpetType
             })
                 .catch(err => { console.log(err) })
         } else {
-            await setDoc(doc(db, 'inventory', carpetId), {
-                qty: (Number(Object.values(inventoryCarpet.data())[0]) + Number(qty))
+            
+            let curValue = 0;
+            for (const key of Object.values(inventoryCarpet.data())) {
+                if (Number.isInteger(key)) {
+                    curValue = key
+                }
+            }
+
+            await updateDoc(doc(db, 'inventory', carpetId), {
+                qty: curValue + Number(qty),
             })
                 .catch(err => { console.log(err) })
         }
@@ -76,17 +87,18 @@ export const Produce = () => {
     const increaseAmount = async (value, carpetId) => {
         if (value.target.value <= 0) {
             alert("The qty must be higher than 0 !!!")
-            value.target.value = 1;
+            value.target.value = Number(1);
         }
 
         const currentItems = items.map(y => {
             if (y.id === carpetId) {
                 return {
                     id: y.id,
-                    qty: value.target.value,
+                    qty: Number(value.target.value),
                     price: y.price,
                     imgUrl: y.imgUrl,
-                    type: y.type
+                    type: y.type,
+                    name: y.name
                 }
             }
 
@@ -135,7 +147,7 @@ export const Produce = () => {
                                         />
                                     </td>
                                     <td className="col-sm-1 col-md-1">
-                                        <button onClick={e => produceItem(e, carpet.id, carpet.qty)} type="button" className="btn btn-success">
+                                        <button onClick={e => produceItem(e, carpet.id, carpet.qty, carpet.name, carpet.type)} type="button" className="btn btn-success">
                                             <span className="glyphicon glyphicon-remove" /> Produce
                                         </button>
                                     </td>

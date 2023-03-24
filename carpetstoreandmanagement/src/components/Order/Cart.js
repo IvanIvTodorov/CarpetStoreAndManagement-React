@@ -71,7 +71,8 @@ export const Cart = ({ setUserProducts, userProducts }) => {
                     qty: value.target.value,
                     price: y.price,
                     imgUrl: y.imgUrl,
-                    type: y.type
+                    type: y.type,
+                    name: y.name
                 }
             }
 
@@ -92,7 +93,8 @@ export const Cart = ({ setUserProducts, userProducts }) => {
 
         await addDoc(ordersCollection, {
             [userId]: {...addOrder},
-            isCompleted: false
+            isCompleted: false,
+            dateOforder: new Date().toLocaleDateString("de-DE")
         });
 
         await deleteDoc(document)
@@ -180,7 +182,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
     } else {
         return (
 
-            <div>
+            <div style={{ minHeight: '567px' }}>
                 <h1 style={{ textAlign: 'center' }}>
                     Your shopping cart is Empty!
                 </h1>

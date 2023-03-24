@@ -4,7 +4,7 @@ import { db, auth } from '../../firebase';
 import { getDoc, doc, deleteDoc, collection, addDoc, updateDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
-export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts }) => {
+export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, isAuth }) => {
     const [carpet, setCarpet] = useState({})
     const { carpetId } = useParams();
 
@@ -77,7 +77,7 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts })
     }
 
     return (
-        <div className="container">
+        <div className='container' style={{ minHeight: '567px' }}>
             <div className="card">
                 <div className="container-fliud">
                     <div className="wrapper row">
@@ -105,13 +105,14 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts })
                                 </p>
                             </div>
                             <hr />
-                            {!isAdmin ?
+                            {isAuth && !isAdmin &&
                                 <div className="action">
                                     <button onClick={addProduct} className="add-to-cart btn btn-default" type="button">
                                         Add to cart
                                     </button>
                                 </div>
-                                :
+                            }   
+                            {isAdmin &&
                                 <div className="action">
                                     <div className='d-flex justify-content-between'>
                                         <Link to={{ pathname: `/edit/${carpetId}` }} style={{ border: 'solid black', marginLeft: '50px' }} className="add-to-cart btn" type="button">

@@ -6,13 +6,17 @@ import { db } from "../../firebase";
 export const ProduceFromOrder = () => {
     const { orderId } = useParams();
     const [orderItems, setOrderItems] = useState([]);
-
     useEffect(() => {
         const getCarpets = async () => {
             const docRef = doc(db, "orders", orderId);
             const document = await getDoc(docRef);
 
-            setOrderItems(Object.values(document.data()).map(x => (Object.values(x).map((z, index) => ({
+            const filtered = document.data();
+
+            delete filtered.isCompleted
+            delete filtered.dateOforder
+
+            setOrderItems(Object.values(filtered).map(x => (Object.values(x).map((z, index) => ({
                 ...z, id: Object.keys(x)[index]
             })))));
         }
@@ -20,9 +24,9 @@ export const ProduceFromOrder = () => {
         getCarpets();
     }, [])
 
-    const produceItem = async (e, carpetId, qty) => {
+    const produceItem = async (e, carpetId, qty, carpetName, carpetType) => {
         e.preventDefault();
-        
+
         const yarnRef = doc(db, 'rawMaterials', 'yarn');
         const yarnDocument = await getDoc(yarnRef);
         const weftRef = doc(db, 'rawMaterials', 'weft');
@@ -33,7 +37,7 @@ export const ProduceFromOrder = () => {
         let alertMsg = 'You need to buy more ';
         if (Number(qty) > Number(Object.values(yarnDocument.data())[0])) {
             alertMsg = alertMsg + "yarn "
-          
+
         };
 
         if (Number(qty) > Number(Object.values(weftDocument.data())[0])) {
@@ -54,15 +58,23 @@ export const ProduceFromOrder = () => {
 
         if (!inventoryCarpet.data()) {
             await setDoc(doc(db, 'inventory', carpetId), {
-                qty: Number(qty)
+                qty: Number(qty),
+                name: carpetName,
+                type: carpetType
             })
-            .catch(err => { console.log(err) })
-        }else{
-            await setDoc(doc(db, 'inventory', carpetId), {
-                qty: (Number(Object.values(inventoryCarpet.data())[0]) + Number(qty))
+                .catch(err => { console.log(err) })
+        } else {
+            let curValue = 0;
+            for (const key of Object.values(inventoryCarpet.data())) {
+                if (Number.isInteger(key)) {
+                    curValue = key
+                }
+            }
+            await updateDoc(doc(db, 'inventory', carpetId), {
+                qty: curValue + Number(qty),
             })
-            .catch(err => { console.log(err) })
-        }    
+                .catch(err => { console.log(err) })
+        }
 
         await updateDoc(weftRef, {
             qty: Number(Object.values(weftDocument.data())[0] - Number(qty))
@@ -85,6 +97,7 @@ export const ProduceFromOrder = () => {
                         <thead>
                             <tr>
                                 <th>Product</th>
+                                <th>Name</th>
                                 <th>Quantity</th>
                                 <th>&nbsp;</th>
                             </tr>
@@ -94,7 +107,7 @@ export const ProduceFromOrder = () => {
                                 return <Fragment key={index}>
                                     {x.map((carpet, index) => {
                                         return <tr key={index}>
-                                            <td className="col-sm-8 col-md-6">
+                                            <td className="col-sm-1 col-md-1">
                                                 <div className="media justify-content-center">
                                                     <Link className="thumbnail pull-left" to={`/details/${carpet.id}`}>
                                                         {" "}
@@ -106,11 +119,12 @@ export const ProduceFromOrder = () => {
                                                     </Link>
                                                 </div>
                                             </td>
+                                            <td className="col-sm-8 col-md-6">{carpet.name}</td>
                                             <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
                                                 <span>{carpet.qty}</span>
                                             </td>
                                             <td className="col-sm-1 col-md-1">
-                                                <button onClick={e => produceItem(e, carpet.id, carpet.qty)} type="button" className="btn btn-success">
+                                                <button onClick={e => produceItem(e, carpet.id, carpet.qty, carpet.name, carpet.type)} type="button" className="btn btn-success">
                                                     <span className="glyphicon glyphicon-remove" /> Produce
                                                 </button>
                                             </td>

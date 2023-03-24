@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom"
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { AuthContext } from "./contexts/AuthContext.js";
 import { getDocs, collection, doc, getDoc } from 'firebase/firestore'
 import { db, auth } from './firebase';
@@ -21,6 +21,7 @@ import { Edit } from "./components/Edit/Edit.js";
 import { Orders } from "./components/Order/Orders.js";
 import { RawMaterials } from "./components/RawMaterials/RawMaterials.js";
 import { Produce } from "./components/Produce/Produce.js";
+import { OrderDetails } from "./components/Order/OrderDetails.js";
 
 
 function App() {
@@ -30,57 +31,58 @@ function App() {
   const [userProducts, setUserProducts] = useState([])
 
 
-    const carpetCollection = collection(db, 'carpet')
-    useEffect(() => {
-        const getCarpets = async () => {
-            const data = await getDocs(carpetCollection)
-            setCarpets(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  const carpetCollection = collection(db, 'carpet')
+  useEffect(() => {
+    const getCarpets = async () => {
+      const data = await getDocs(carpetCollection)
+      setCarpets(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
 
-            const carpetCollection2 = collection(db, 'userProducts')
-            const data3 = await getDocs(carpetCollection2)
-            let userId = auth.currentUser.uid
-            const document = doc(db, 'userProducts', userId)
-            const data2 = await getDoc(document);
+      const carpetCollection2 = collection(db, 'userProducts')
+      const data3 = await getDocs(carpetCollection2)
+      let userId = auth.currentUser.uid
+      const document = doc(db, 'userProducts', userId)
+      const data2 = await getDoc(document);
 
-            if (data2.data()) {
-                setUserProducts(Object.entries(data2.data().carpets).map((carpet => {
-                    return {
-                        id: carpet[0],
-                        ...carpet[1]
-                    }
-                })));
-            }
-        }
+      if (data2.data()) {
+        setUserProducts(Object.entries(data2.data().carpets).map((carpet => {
+          return {
+            id: carpet[0],
+            ...carpet[1]
+          }
+        })));
+      }
+    }
 
-        getCarpets();
-    }, [])
+    getCarpets();
+  }, [])
 
   return (
-    <AuthContext.Provider value={{isAuth, isAdmin, userProducts}}>
+    <AuthContext.Provider value={{ isAuth, isAdmin, userProducts }}>
       <div>
-        <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} isAdmin={isAdmin}/>
-          <main style={{ minHeight: "517px" }}>
-            <Routes>
-              <Route path='/register' element={<Register />} />
-              <Route path='/login' element={<Login setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />} />
-              <Route path='/' element={<Home />} />
-              <Route path='/products' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts}/>} />
-              <Route path='/products/paths' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts}/>} />
-              <Route path='/products/carpets' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts}/>} />
-              <Route path='/details/:carpetId' element={<ProductDetail isAdmin={isAdmin} setCarpets={setCarpets} carpets={carpets} setUserProducts={setUserProducts}/>} />
-              <Route path='/edit/:carpetId' element={<Edit setCarpets={setCarpets}/>} />
-              <Route path='/cart' element={<Cart setUserProducts={setUserProducts} userProducts={userProducts}/>} />
-              <Route path='/myorders' element={<MyOrders />} />
-              <Route path='/orders' element={<Orders userProducts={userProducts}/>} />
-              <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth} setCarpets={setCarpets}/>} />
-              <Route path='/produce/:orderId' element={<ProduceFromOrder />} />
-              <Route path='/produce/' element={<Produce />} />
-              <Route path='/inventory' element={<Inventory />} />
-              <Route path='/rawmaterials' element={<RawMaterials />} />
-            </Routes>
-          </main>
+        <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} isAdmin={isAdmin} />
+        <main style={{ minHeight: "517px" }}>
+          <Routes>
+            <Route path='/register' element={<Register />} />
+            <Route path='/login' element={<Login setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/products' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts} isAuth={isAuth} />} />
+            <Route path='/products/paths' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts} isAuth={isAuth} />} />
+            <Route path='/products/carpets' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts} isAuth={isAuth} />} />
+            <Route path='/details/:carpetId' element={<ProductDetail isAdmin={isAdmin} setCarpets={setCarpets} carpets={carpets} setUserProducts={setUserProducts} isAuth={isAuth} />} />
+            <Route path='/edit/:carpetId' element={<Edit setCarpets={setCarpets} />} />
+            <Route path='/cart' element={<Cart setUserProducts={setUserProducts} userProducts={userProducts} />} />
+            <Route path='/myorders' element={<MyOrders />} />
+            <Route path='/myorders/:orderId' element={<OrderDetails />} />
+            <Route path='/orders' element={<Orders userProducts={userProducts} />} />
+            <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth} setCarpets={setCarpets} />} />
+            <Route path='/produce/:orderId' element={<ProduceFromOrder />} />
+            <Route path='/produce/' element={<Produce />} />
+            <Route path='/inventory' element={<Inventory />} />
+            <Route path='/rawmaterials' element={<RawMaterials />} />
+          </Routes>
+        </main>
         <Footer />
-      </div> 
+      </div>
     </AuthContext.Provider>
   );
 }

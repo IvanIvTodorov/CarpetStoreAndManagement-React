@@ -6,8 +6,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import {useState } from 'react';
 
 
-export const Products = ({ carpets, isAdmin, setUserProducts}) => {
-    const [carpet, setCarpet] = useState({})
+export const Products = ({ carpets, isAdmin, setUserProducts, isAuth}) => {
 
     const location = useLocation();
     const path = location.pathname.split('/');
@@ -75,7 +74,7 @@ export const Products = ({ carpets, isAdmin, setUserProducts}) => {
     }
 
     return (
-        <div className='container'>
+        <div className='container' style={{ minHeight: '567px' }}>
             <div className="row">
                 {carpets.length > 0 ? carpets.map((carpet) => {
                     return <div key={carpet.id} className="col-md-3 col-sm-6">
@@ -86,13 +85,14 @@ export const Products = ({ carpets, isAdmin, setUserProducts}) => {
                                     <img className="pic-2" style={{ width: '350px', height: '400px' }} src={carpet.imgUrl} />
 
                                 </Link>
-                                {isAdmin ?
-                                    <Link  className="add-to-cart" to={{ pathname: `/edit/${carpet.id}` }}>
-                                        Edit
-                                    </Link>
-                                    :
+                                {isAuth &&
                                     <Link onClick={e => addProduct(e, carpet.id)} className="add-to-cart" to="">
                                         Add to cart
+                                    </Link>
+                                }
+                                {isAdmin &&
+                                    <Link  className="add-to-cart" to={{ pathname: `/edit/${carpet.id}` }}>
+                                        Edit
                                     </Link>
                                 }
 

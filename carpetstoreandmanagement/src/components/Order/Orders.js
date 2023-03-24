@@ -19,6 +19,7 @@ export const Orders = ({ userProducts }) => {
 
             const el = curOrders[index];
             delete el.isCompleted;
+            delete el.dateOforder;
             filteredOrders.push(el);
         }
 
@@ -39,7 +40,7 @@ export const Orders = ({ userProducts }) => {
     }
 
     useEffect(() => {
-         getOrders()
+        getOrders()
     }, [])
 
     const produceItems = async (e, orderId) => {
@@ -53,11 +54,15 @@ export const Orders = ({ userProducts }) => {
         const docRef = doc(db, "orders", orderId);
         const document = await getDoc(docRef);
 
+        const filter = document.data();
+        delete filter.dateOforder;
+        delete filter.isCompleted;
         let arr = [];
         let arrQty = [];
-        const products = Object.values(document.data()).map(x => (Object.values(x).map((z, index) => ({
+        const products = Object.values(filter).map(x => (Object.values(x).map((z, index) => ({
             ...z, id: Object.keys(x)[index]
         }, arr.push(Object.keys(x)[index]), arrQty.push(z.qty)))));
+
 
         const alertMsg = 'You do not have enough pcs from '
         const isAlert = false;
@@ -65,7 +70,10 @@ export const Orders = ({ userProducts }) => {
             const curDocRef = doc(db, 'inventory', arr[index])
             const curDoc = await getDoc(curDocRef);
 
-            const invQty = Object.values(curDoc.data())[0]
+            const carpet = curDoc.data();
+            delete carpet.name;
+            delete carpet.type;
+            const invQty = carpet.qty;
 
             if (invQty < arrQty[index]) {
                 alertMsg = alertMsg + arrQty[index]
@@ -81,8 +89,14 @@ export const Orders = ({ userProducts }) => {
             for (let index = 0; index < arr.length; index++) {
                 const docRef = doc(db, 'inventory', arr[index])
                 const docToUpdate = await getDoc(docRef);
+                const filter = docToUpdate.data();
+                delete filter.isCompleted
+                delete filter.dateOforder
+                delete filter.name
+                delete filter.type
+
                 const orderQty = Number(arrQty[index]);
-                const newQty = Object.values(docToUpdate.data())[0] - orderQty;
+                const newQty = filter.qty - orderQty;
 
                 await updateDoc(docRef, {
                     qty: newQty
@@ -97,7 +111,7 @@ export const Orders = ({ userProducts }) => {
     }
 
     if (!orders || orders.length === 0) {
-        return <h1 style={{textAlign: 'center'}}>All orders are completed !</h1>
+        return <h1 style={{ textAlign: 'center' }}>All orders are completed !</h1>
     }
     return (
         <div className="container" style={{ minHeight: '567px' }}>
@@ -141,7 +155,7 @@ export const Orders = ({ userProducts }) => {
                                             <button onClick={e => completeOrder(e, orderId[index])} className="btn btn-success">Complete order</button>
                                         </td>
                                     </tr>
-                                    <tr style={{ borderTop: "5px solid red" }}>
+                                    <tr>
                                     </tr>
                                 </Fragment>
                             })}
