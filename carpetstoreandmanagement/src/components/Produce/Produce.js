@@ -121,7 +121,7 @@ export const Produce = () => {
                             <tr>
                                 <th>Product</th>
                                 <th>Name</th>
-                                <th>Quantity</th>
+                                <th style={{textAlign: 'center'}}>Quantity</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
@@ -140,8 +140,8 @@ export const Produce = () => {
                                             </Link>
                                         </div>
                                     </td>
-                                    <td className="col-sm-8 col-md-6" >{carpet.name}</td>
-                                    <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
+                                    <td className="col-sm-7 col-md-6" >{carpet.name}</td>
+                                    <td className="col-sm-1 col-md-2" style={{ textAlign: "right" }}>
                                         <input
                                             type="number"
                                             className="form-control text-center"

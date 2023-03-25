@@ -127,7 +127,7 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
                                 </div>
                             </div>
                             <div className="details col-md-6">
-                                <h3 className="product-title">{carpet.name}</h3>
+                                <h3 className="product-title">Name: {carpet.name}</h3>
                                 <hr />
                                 <h3 className="product-title">
                                     Origin: <span>Bulgaria</span>
@@ -168,8 +168,8 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
                     </div>
                 </div>
             </div>
-
-            <div className="container my-2">
+            {isAuth && 
+                <div className="container my-2">
                 <h1 style={{ textAlign: 'center' }}>Leave a comment</h1>
                 <div className="row mt-4 d-flex justify-content-center">
                     <div className="col-md-9">
@@ -216,6 +216,7 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
                     </div>
                 </div>
             </div>
+            }                                      
         </>
     );
 };

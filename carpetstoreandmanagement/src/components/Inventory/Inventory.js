@@ -26,7 +26,6 @@ export const Inventory = () => {
         <Fragment>
             <div className="container" style={{ minHeight: '332px' }}>
                 <h1 style={{ textAlign: 'center' }}>Products</h1>
-
                 <div className="row">
                     <div className="span5 d-flex justify-content-center">
                         <table className="table table-striped table-condensed" style={{width: '70%'}}>
