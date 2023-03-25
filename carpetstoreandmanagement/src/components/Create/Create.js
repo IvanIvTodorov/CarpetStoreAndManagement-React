@@ -1,10 +1,12 @@
 import style from './Create.Module.css'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { addDoc, collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
+import {AuthContext } from '../../contexts/AuthContext'
 
-export const Create = ({ isAdmin, isAuth, setCarpets }) => {
+
+export const Create = ({setCarpets }) => {
     const [name, setName] = useState('');
     const [type, setType] = useState('');
     const [price, setPrice] = useState('');
@@ -26,6 +28,8 @@ export const Create = ({ isAdmin, isAuth, setCarpets }) => {
             navigate('/products')
         })
     }
+
+    const {isAdmin, isAuth} = useContext(AuthContext)
 
     useEffect(() => {
         if (isAuth && !isAdmin) {

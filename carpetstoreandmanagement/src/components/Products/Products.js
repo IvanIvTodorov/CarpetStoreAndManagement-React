@@ -1,15 +1,18 @@
 import style from './Products.Module.css'
 import { Link } from 'react-router-dom';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation} from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import {useState } from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext'
 
 
-export const Products = ({ carpets, isAdmin, setUserProducts, isAuth}) => {
+
+export const Products = ({ carpets, setUserProducts}) => {
 
     const location = useLocation();
     const path = location.pathname.split('/');
+    const {isAdmin, isAuth} = useContext(AuthContext)
 
 
 
@@ -29,7 +32,7 @@ export const Products = ({ carpets, isAdmin, setUserProducts, isAuth}) => {
         const docRef = doc(db, 'userProducts', userId);
         const data = await (await getDoc(docRef)).data();
 
-        
+
         if (!data || Object.keys(data) == 0) {
             await setDoc(doc(db, 'userProducts', userId), {
                 carpets: {
@@ -43,7 +46,7 @@ export const Products = ({ carpets, isAdmin, setUserProducts, isAuth}) => {
                     }
                 }
             })
-            .catch(err => { console.log(err) })
+                .catch(err => { console.log(err) })
 
         } else {
             if (!data.carpets.hasOwnProperty(carpetId)) {
@@ -93,24 +96,24 @@ export const Products = ({ carpets, isAdmin, setUserProducts, isAuth}) => {
                                     </Link>
                                 }
                                 {isAdmin &&
-                                    <Link  className="add-to-cart" to={{ pathname: `/edit/${carpet.id}` }}>
+                                    <Link className="add-to-cart" to={{ pathname: `/edit/${carpet.id}` }}>
                                         Edit
                                     </Link>
                                 }
 
                             </div>
-                            <div className="product-content" style={{border: '1px solid black'}}>
+                            <div className="product-content" style={{ border: '1px solid black' }}>
                                 <h3 className="title"  >
                                     <Link to={{ pathname: `/details/${carpet.id}` }}>{carpet.name}</Link>
                                 </h3>
-                                <hr/>
+                                <hr />
                                 <span className="price">${carpet.price}</span>
                             </div>
                         </div>
                     </div>
                 })
                     :
-                    <h1 style={{textAlign: 'center'}}>We are adding designs at the moment !</h1>
+                    <h1 style={{ textAlign: 'center' }}>We are adding designs at the moment !</h1>
                 }
             </div>
         </div>

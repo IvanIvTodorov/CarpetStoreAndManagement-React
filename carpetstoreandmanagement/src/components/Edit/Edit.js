@@ -1,8 +1,10 @@
 import style from './Edit.Module.css'
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef, useContext} from 'react';
 import { updateDoc, doc, getDoc,collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
+
+import {AuthContext } from '../../contexts/AuthContext'
 
 export const Edit = ({setCarpets}) => {
     const { carpetId } = useParams();
@@ -15,12 +17,20 @@ export const Edit = ({setCarpets}) => {
     const type = useRef(null);
     const price = useRef(null);
     const imgUrl = useRef(null);
-
+    const {isAdmin, isAuth} = useContext(AuthContext)
+    
     useEffect(() => {
+        if (isAuth && !isAdmin) {
+            navigate('/')
+        } else if (!isAdmin || !isAuth) {
+            navigate('/login')
+        }
         const getCarpet = async () => {
             const data = await getDoc(docRef);
             setCarpet(data.data())
         };
+
+        
 
         getCarpet();
     }, [])

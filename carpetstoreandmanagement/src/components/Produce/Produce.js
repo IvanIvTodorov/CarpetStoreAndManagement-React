@@ -1,12 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export const Produce = () => {
     const [items, setItems] = useState([]);
+    const navigate = useNavigate();
+    const { isAuth, isAdmin } = useContext(AuthContext);
 
     useEffect(() => {
+        if (isAuth && !isAdmin) {
+            navigate('/')
+        } else if (!isAdmin || !isAuth) {
+            navigate('/login')
+        }
         const getCarpets = async () => {
             const docRef = collection(db, "carpet");
             const document = await getDocs(docRef);
@@ -57,7 +65,7 @@ export const Produce = () => {
             })
                 .catch(err => { console.log(err) })
         } else {
-            
+
             let curValue = 0;
             for (const key of Object.values(inventoryCarpet.data())) {
                 if (Number.isInteger(key)) {
@@ -121,7 +129,7 @@ export const Produce = () => {
                             <tr>
                                 <th>Product</th>
                                 <th>Name</th>
-                                <th style={{textAlign: 'center'}}>Quantity</th>
+                                <th style={{ textAlign: 'center' }}>Quantity</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>

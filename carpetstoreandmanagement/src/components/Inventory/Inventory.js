@@ -1,12 +1,21 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { AuthContext } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export const Inventory = () => {
     const [carpets, setCarpets] = useState([]);
     const [rawMaterials, setRawMaterials] = useState([]);
+    const { isAuth, isAdmin } = useContext(AuthContext)
+    const navigate = useNavigate();
 
     useEffect(() => {
+        if (isAuth && !isAdmin) {
+            navigate('/')
+        } else if (!isAdmin || !isAuth) {
+            navigate('/login')
+        }
         const getCarpets = async () => {
             const invRef = collection(db, "inventory");
             const document = await getDocs(invRef);
@@ -28,7 +37,7 @@ export const Inventory = () => {
                 <h1 style={{ textAlign: 'center' }}>Products</h1>
                 <div className="row">
                     <div className="span5 d-flex justify-content-center">
-                        <table className="table table-striped table-condensed" style={{width: '70%'}}>
+                        <table className="table table-striped table-condensed" style={{ width: '70%' }}>
                             <thead>
                                 <tr>
                                     <th>Product name</th>
@@ -53,8 +62,8 @@ export const Inventory = () => {
             <h1 style={{ textAlign: 'center' }}>Raw materials</h1>
             <div className="container">
                 <div className="row">
-                <div className="span5 d-flex justify-content-center">
-                        <table className="table table-striped table-condensed" style={{width: '70%'}}>
+                    <div className="span5 d-flex justify-content-center">
+                        <table className="table table-striped table-condensed" style={{ width: '70%' }}>
                             <thead>
                                 <tr>
                                     <th>Product</th>

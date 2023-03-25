@@ -1,13 +1,19 @@
 import { collection, getDoc, getDocs, doc, updateDoc, deleteField, setDoc, addDoc, deleteDoc } from "firebase/firestore"
 import { db, auth } from "../../firebase"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { AuthContext } from "../../contexts/AuthContext"
 
 export const Cart = ({ setUserProducts, userProducts }) => {
     const navigate = useNavigate();
     let totalPrice = userProducts.map(x => +x.qty * +x.price).reduce((a,b) => a + b, 0)
+    const {isAuth} = useContext(AuthContext);
     
     useEffect(() => {
+        if (!isAuth) {
+            navigate('/login')
+        }
+
         const getCarpets = async () => {
             const carpetCollection = collection(db, 'userProducts')
             const data = await getDocs(carpetCollection)

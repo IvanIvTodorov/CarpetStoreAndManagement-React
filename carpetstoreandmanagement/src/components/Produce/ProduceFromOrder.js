@@ -1,12 +1,21 @@
-import { useParams, Link } from "react-router-dom";
-import { Fragment, useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export const ProduceFromOrder = () => {
     const { orderId } = useParams();
     const [orderItems, setOrderItems] = useState([]);
+    const navigate = useNavigate();
+    const { isAdmin, isAuth } = useContext(AuthContext);
+    
     useEffect(() => {
+        if (isAuth && !isAdmin) {
+            navigate('/')
+        } else if (!isAdmin || !isAuth) {
+            navigate('/login')
+        }
         const getCarpets = async () => {
             const docRef = doc(db, "orders", orderId);
             const document = await getDoc(docRef);

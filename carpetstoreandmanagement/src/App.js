@@ -59,7 +59,7 @@ function App() {
   return (
     <AuthContext.Provider value={{ isAuth, isAdmin, userProducts }}>
       <div style={{
-        backgroundColor: 'cornsilk',
+        backgroundColor: 'cornsilk', 
       }}>
         <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} isAdmin={isAdmin} />
         <main style={{ minHeight: "517px"}}>
@@ -67,16 +67,16 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />} />
             <Route path='/' element={<Home />} />
-            <Route path='/products' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts} isAuth={isAuth} />} />
-            <Route path='/products/paths' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts} isAuth={isAuth} />} />
-            <Route path='/products/carpets' element={<Products carpets={carpets} isAdmin={isAdmin} setUserProducts={setUserProducts} isAuth={isAuth} />} />
-            <Route path='/details/:carpetId' element={<ProductDetail isAdmin={isAdmin} setCarpets={setCarpets} carpets={carpets} setUserProducts={setUserProducts} isAuth={isAuth} />} />
-            <Route path='/edit/:carpetId' element={<Edit setCarpets={setCarpets} />} />
+            <Route path='/products' element={<Products carpets={carpets} setUserProducts={setUserProducts}/>} />
+            <Route path='/products/paths' element={<Products carpets={carpets} setUserProducts={setUserProducts}/>} />
+            <Route path='/products/carpets' element={<Products carpets={carpets} setUserProducts={setUserProducts}/>} />
+            <Route path='/details/:carpetId' element={<ProductDetail setCarpets={setCarpets} setUserProducts={setUserProducts}/>} />
             <Route path='/cart' element={<Cart setUserProducts={setUserProducts} userProducts={userProducts} />} />
             <Route path='/myorders' element={<MyOrders />} />
             <Route path='/myorders/:orderId' element={<OrderDetails />} />
-            <Route path='/orders' element={<Orders userProducts={userProducts} />} />
-            <Route path='/create' element={<Create isAdmin={isAdmin} isAuth={isAuth} setCarpets={setCarpets} />} />
+            <Route path='/orders' element={<Orders/>} />
+            <Route path='/edit/:carpetId' element={<Edit setCarpets={setCarpets} />} />
+            <Route path='/create' element={<Create setCarpets={setCarpets} />} />
             <Route path='/produce/:orderId' element={<ProduceFromOrder />} />
             <Route path='/produce/' element={<Produce />} />
             <Route path='/inventory' element={<Inventory />} />

@@ -1,14 +1,20 @@
-import { useEffect, useState, Fragment } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, Fragment, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export const OrderDetails = () => {
     const { orderId } = useParams();
     const [userOrders, setUserOrders] = useState([])
     const [orderStatus, setOrderStatus] = useState(null);
-
+    const navigate = useNavigate();
+    const {isAuth} = useContext(AuthContext);
+    
     useEffect(() => {
+        if (!isAuth) {
+            navigate('/login')
+        }
         const getCarpets = async () => {
             const orderRef = doc(db, 'orders', orderId)
             const document = await getDoc(orderRef);
@@ -61,10 +67,10 @@ export const OrderDetails = () => {
                 </div>
             </div>
             {
-                 orderStatus ? 
-                 <h1 style={{ textAlign: 'center' }}>Your order has been sent !</h1>
-                 :
-                 <h1 style={{ textAlign: 'center' }}>We are preparing your order!</h1>
+                orderStatus ?
+                    <h1 style={{ textAlign: 'center' }}>Your order has been sent !</h1>
+                    :
+                    <h1 style={{ textAlign: 'center' }}>We are preparing your order!</h1>
             }
         </>
     );

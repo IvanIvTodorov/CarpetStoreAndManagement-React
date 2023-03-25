@@ -1,8 +1,9 @@
 import style from './RawMaterials.Module.css'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
+import { AuthContext } from '../../contexts/AuthContext'
 
 
 
@@ -10,6 +11,16 @@ export const RawMaterials = () => {
     const [yarn, setYarn] = useState(1);
     const [warp, setWarp] = useState(1);
     const [weft, setWeft] = useState(1);
+    const { isAuth, isAdmin } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isAuth && !isAdmin) {
+            navigate('/')
+        } else if (!isAdmin || !isAuth) {
+            navigate('/login')
+        }
+    }, [])
 
     const increaseAmount = async (value, rawMaterial) => {
         if (value.target.value < 1) {
@@ -18,9 +29,9 @@ export const RawMaterials = () => {
         }
         if (rawMaterial == "yarn") {
             setYarn(value.target.value)
-        }else if(rawMaterial == "warp"){
+        } else if (rawMaterial == "warp") {
             setWarp(value.target.value)
-        }else{
+        } else {
             setWeft(value.target.value)
         }
     };
@@ -28,7 +39,7 @@ export const RawMaterials = () => {
     const buyWeft = async () => {
         const weftRef = doc(db, 'rawMaterials', 'weft');
         const document = await getDoc(weftRef);
-        
+
         await updateDoc(weftRef, {
             qty: Number(Object.values(document.data())[0] + Number(weft))
         });
@@ -38,7 +49,7 @@ export const RawMaterials = () => {
     const buyYarn = async () => {
         const yarnRef = doc(db, 'rawMaterials', 'yarn');
         const document = await getDoc(yarnRef);
-        
+
         await updateDoc(yarnRef, {
             qty: Number(Object.values(document.data())[0] + Number(yarn))
         });
@@ -48,14 +59,14 @@ export const RawMaterials = () => {
     const buyWarp = async () => {
         const warpRef = doc(db, 'rawMaterials', 'warp');
         const document = await getDoc(warpRef);
-        
+
         await updateDoc(warpRef, {
             qty: Number(Object.values(document.data())[0] + Number(warp))
         });
 
         return alert(`You have successfuly bought ${Number(warp)} pcs of warp !`)
     }
-    
+
     return (
         <div className='container' style={{ minHeight: '567px' }}>
             <div className="row d-flex justify-content-center" >
@@ -72,7 +83,7 @@ export const RawMaterials = () => {
                         </div>
                         <div className="product-content form-inline">
 
-                            <input onChange={value => increaseAmount(value, "warp")} min={1} defaultValue={1} className="form-control" type="number" style={{border: '1px solid black'}}></input>
+                            <input onChange={value => increaseAmount(value, "warp")} min={1} defaultValue={1} className="form-control" type="number" style={{ border: '1px solid black' }}></input>
                         </div>
                     </div>
                 </div><div className="col-md-3 col-sm-6">
@@ -88,7 +99,7 @@ export const RawMaterials = () => {
                         </div>
                         <div className="product-content form-inline">
 
-                            <input onChange={value => increaseAmount(value, "yarn")} min={1} defaultValue={1} className="form-control" type="number" style={{border: '1px solid black'}}></input>
+                            <input onChange={value => increaseAmount(value, "yarn")} min={1} defaultValue={1} className="form-control" type="number" style={{ border: '1px solid black' }}></input>
                         </div>
                     </div>
                 </div><div className="col-md-3 col-sm-6">
@@ -103,7 +114,7 @@ export const RawMaterials = () => {
                             </Link>
                         </div>
                         <div className="product-content form-inline">
-                            <input onChange={value => increaseAmount(value, "weft")} min={1} defaultValue={1} className="form-control" type="number" style={{border: '1px solid black'}}></input>
+                            <input onChange={value => increaseAmount(value, "weft")} min={1} defaultValue={1} className="form-control" type="number" style={{ border: '1px solid black' }}></input>
                         </div>
                     </div>
                 </div>

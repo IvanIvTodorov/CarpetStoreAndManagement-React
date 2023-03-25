@@ -1,12 +1,22 @@
-import { useState, useEffect, Fragment } from "react"
+import { useState, useEffect, Fragment, useContext } from "react"
 import { db, auth } from "../../firebase"
 import { collection, getDocs, getDoc, doc, setDoc, updateDoc, query, where } from "firebase/firestore"
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
-export const Orders = ({ userProducts }) => {
+export const Orders = () => {
     const [orders, setOrders] = useState([])
     const [orderId, setOrdersId] = useState([]);
     const navigate = useNavigate();
+    const {isAdmin, isAuth} = useContext(AuthContext);
+
+    useEffect(() => {
+        if (isAuth && !isAdmin) {
+            navigate('/')
+        } else if (!isAdmin || !isAuth) {
+            navigate('/login')
+        }
+    }, []);
 
     const getOrders = async () => {
         const carpetCollection = query(collection(db, "orders"), where("isCompleted", "==", false));

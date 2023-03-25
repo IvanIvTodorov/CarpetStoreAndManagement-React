@@ -2,13 +2,16 @@ import style from './ProductDetails.Module.css'
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db, auth } from '../../firebase';
 import { getDoc, doc, deleteDoc, collection, addDoc, updateDoc, setDoc, getDocs, query, where } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../contexts/AuthContext'
 
-export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, isAuth }) => {
+
+export const ProductDetail = ({ setCarpets, setUserProducts}) => {
     const [carpet, setCarpet] = useState({})
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
     const { carpetId } = useParams();
+    const {isAdmin, isAuth} = useContext(AuthContext)
 
     const docRef = doc(db, 'carpet', carpetId);
     let navigate = useNavigate();
@@ -17,7 +20,7 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
     useEffect(() => {
         const getCarpet = async () => {
             const data = await getDoc(docRef);
-            setCarpet({...data.data()});
+            setCarpet({ ...data.data() });
             const curComments = query(commentCollection, where("carpetId", "==", carpetId));
             const filteredComments = await getDocs(curComments)
 
@@ -109,8 +112,8 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
         await deleteDoc(doc(db, 'comments', commentId));
 
         const curComments = query(commentCollection, where("carpetId", "==", carpetId));
-        const filteredComments = await getDocs(curComments)       
-        setComments(filteredComments.docs.map(doc => ({ ...doc.data(), commentId: doc.id  })))
+        const filteredComments = await getDocs(curComments)
+        setComments(filteredComments.docs.map(doc => ({ ...doc.data(), commentId: doc.id })))
     }
 
     return (
@@ -168,55 +171,55 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
                     </div>
                 </div>
             </div>
-            {isAuth && 
+            {isAuth &&
                 <div className="container my-2">
-                <h1 style={{ textAlign: 'center' }}>Leave a comment</h1>
-                <div className="row mt-4 d-flex justify-content-center">
-                    <div className="col-md-9">
-                        <form className=" reply-form ">
-                            <div className="commentBox">
-                                <ul className="list-unstyled">
-                                    {comments.map((x, index) => {
-                                        return <li key={index}>
-                                            <span className="profileBox">{x.email}</span>{" "}
-                                            <span className="profileText">
-                                                {x.text}
-                                            </span>
-                                            {x.userId === auth.currentUser.uid &&
-                                                <button style={{ border: 'solid black' }} className="btn btn-danger float-right" type="button" onClick={e => onDeleteComment(e, x.commentId)}>
-                                                    Delete
-                                                </button>
-                                            }
+                    <h1 style={{ textAlign: 'center' }}>Leave a comment</h1>
+                    <div className="row mt-4 d-flex justify-content-center">
+                        <div className="col-md-9">
+                            <form className=" reply-form ">
+                                <div className="commentBox">
+                                    <ul className="list-unstyled">
+                                        {comments.map((x, index) => {
+                                            return <li key={index}>
+                                                <span className="profileBox">{x.email}</span>{" "}
+                                                <span className="profileText">
+                                                    {x.text}
+                                                </span>
+                                                {x.userId === auth.currentUser.uid &&
+                                                    <button style={{ border: 'solid black' }} className="btn btn-danger float-right" type="button" onClick={e => onDeleteComment(e, x.commentId)}>
+                                                        Delete
+                                                    </button>
+                                                }
 
-                                        </li>
-                                    })}
+                                            </li>
+                                        })}
 
-                                </ul>
-                            </div>
-                            <div id="div_id_username" className="form-group required">
-                                <div className="controls form-group d-flex w-100 ">
-                                    <input
-                                        className="input-md  textinput textInput form-control"
-                                        id="id_username"
-                                        placeholder="Write your review"
-                                        type="text"
-                                        onChange={(value) => setComment(value.target.value)}
-                                        value={comment}
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="btn btn-info border-radius-0  m-0 w-25"
-                                        onClick={sendComment}
-                                    >
-                                        Send
-                                    </button>
+                                    </ul>
                                 </div>
-                            </div>
-                        </form>
+                                <div id="div_id_username" className="form-group required">
+                                    <div className="controls form-group d-flex w-100 ">
+                                        <input
+                                            className="input-md  textinput textInput form-control"
+                                            id="id_username"
+                                            placeholder="Write your review"
+                                            type="text"
+                                            onChange={(value) => setComment(value.target.value)}
+                                            value={comment}
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="btn btn-info border-radius-0  m-0 w-25"
+                                            onClick={sendComment}
+                                        >
+                                            Send
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            }                                      
+            }
         </>
     );
 };
