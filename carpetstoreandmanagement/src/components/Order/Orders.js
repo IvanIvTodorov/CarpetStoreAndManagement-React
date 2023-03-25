@@ -71,9 +71,13 @@ export const Orders = ({ userProducts }) => {
             const curDoc = await getDoc(curDocRef);
 
             const carpet = curDoc.data();
+            if (!carpet) {
+                return alert(alertMsg + arr[index])
+            }
             delete carpet.name;
             delete carpet.type;
             const invQty = carpet.qty;
+
 
             if (invQty < arrQty[index]) {
                 alertMsg = alertMsg + arr[index]

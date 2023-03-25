@@ -72,7 +72,7 @@ export const RawMaterials = () => {
                         </div>
                         <div className="product-content form-inline">
 
-                            <input onChange={value => increaseAmount(value, "warp")} min={1} defaultValue={1} className="form-control" type="number"></input>
+                            <input onChange={value => increaseAmount(value, "warp")} min={1} defaultValue={1} className="form-control" type="number" style={{border: '1px solid black'}}></input>
                         </div>
                     </div>
                 </div><div className="col-md-3 col-sm-6">
@@ -88,7 +88,7 @@ export const RawMaterials = () => {
                         </div>
                         <div className="product-content form-inline">
 
-                            <input onChange={value => increaseAmount(value, "yarn")} min={1} defaultValue={1} className="form-control" type="number"></input>
+                            <input onChange={value => increaseAmount(value, "yarn")} min={1} defaultValue={1} className="form-control" type="number" style={{border: '1px solid black'}}></input>
                         </div>
                     </div>
                 </div><div className="col-md-3 col-sm-6">
@@ -103,7 +103,7 @@ export const RawMaterials = () => {
                             </Link>
                         </div>
                         <div className="product-content form-inline">
-                            <input onChange={value => increaseAmount(value, "weft")} min={1} defaultValue={1} className="form-control" type="number"></input>
+                            <input onChange={value => increaseAmount(value, "weft")} min={1} defaultValue={1} className="form-control" type="number" style={{border: '1px solid black'}}></input>
                         </div>
                     </div>
                 </div>

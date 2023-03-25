@@ -5,14 +5,14 @@ a:hover{
 	padding: 40px 0;
 }
 .bottom {
-    background-color: #061cc2;
+    background-color: #e4b18d;
 }
 .bottom .copyright {
-    color: #f6fcfd;
+    color: #000809;
     font-weight: 600;
 }
 .copyright a {
-    color: #f6fcfd;
+    color: #000809;
     margin-left: 3px;
     padding-right: 3px;
 }
@@ -23,8 +23,8 @@ a:hover{
     font-weight: 400;
 }
 .copyright p span {
-    color: #f6fcfd;
+    color: #000809;
 }
 .bottom .copyright p, .bottom .copyright a:hover{
-    color: #f6fcfd;
+    color: #000809;
 }

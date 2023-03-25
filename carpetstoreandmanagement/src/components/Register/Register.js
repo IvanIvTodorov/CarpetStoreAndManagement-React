@@ -1,115 +1,70 @@
 import style from './Register.Module.css'
 
-import { useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import {auth} from '../../firebase'
+import { auth } from '../../firebase'
 
 export const Register = () => {
-    const email =  useRef(null);
-    const password = useRef(null);
-    const rePassword = useRef(null);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState("");
+    const [rePassword, setRePassword] = useState("");
     let navigate = useNavigate();
 
     const onRegister = e => {
         e.preventDefault();
-        try {
-            if (password.current.value !== rePassword.current.value) {
-                throw new Error("Password missmatch !")
-            }
-            createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
-                .then(user => {
-                    console.log(user);
-                    navigate('/login');
-                })
-                .catch(err => {
-                    console.log(err);
-                });      
-            
-        } catch (error) {
-            console.log(error)
-        }    
+        if (password !== rePassword) {
+            return alert("Password missmatch !")
+        }
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(user => {
+                console.log(user);
+                navigate('/login');
+                alert('You have been registrated successfully !')
+            })
+            .catch(err => {
+                return alert(err);
+            });
+
     }
     return (
-        <div className="container">
-            <div className="row main">
-                <div className="main-login main-center">
-                    <form>
-                        <div className="form-group">
-                            <label htmlFor="email" className="cols-sm-2 control-label">
-                                Email
-                            </label>
-                            <div className="cols-sm-10">
-                                <div className="input-group">
-                                    <span className="input-group-addon">
-                                        <i className="fa fa-envelope fa" aria-hidden="true" />
-                                    </span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="email"
-                                        id="email"
-                                        placeholder="Enter your Email"
-                                        ref={email}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password" className="cols-sm-2 control-label">
-                                Password
-                            </label>
-                            <div className="cols-sm-10">
-                                <div className="input-group">
-                                    <span className="input-group-addon">
-                                        <i className="fa fa-lock fa-lg" aria-hidden="true" />
-                                    </span>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        name="password"
-                                        id="password"
-                                        placeholder="Enter your Password"
-                                        ref={password}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="confirm" className="cols-sm-2 control-label">
-                                Confirm Password
-                            </label>
-                            <div className="cols-sm-10">
-                                <div className="input-group">
-                                    <span className="input-group-addon">
-                                        <i className="fa fa-lock fa-lg" aria-hidden="true" />
-                                    </span>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        name="confirm"
-                                        id="confirm"
-                                        placeholder="Confirm your Password"
-                                        ref={rePassword}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group d-flex justify-content-center">
-                            <a
-                                target="_blank"
-                                type="button"
-                                id="button"
-                                className="btn btn-primary btn-lg btn-block login-button"
-                                onClick={onRegister}
-                            >
-                                Register
-                            </a>
-                        </div>
-                    </form>
+        <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
+            <div id="formContent">
+                <div className="fadeIn first">
+                    <h1>Register</h1>
                 </div>
+                <form>
+                    <input
+                        type="text"
+                        id="login"
+                        className="fadeIn second"
+                        name="login"
+                        placeholder="Type your email"
+                        onChange={value => setEmail(value.target.value)}
+                        value={email}
+                    />
+                    <input
+                        type="password"
+                        id="password"
+                        className="fadeIn third"
+                        name="login"
+                        placeholder="Type your password"
+                        onChange={value => setPassword(value.target.value)}
+                        value={password}
+                    />
+
+                    <input
+                        type="password"
+                        id="password"
+                        className="fadeIn third"
+                        name="login"
+                        placeholder="Confirm your password"
+                        onChange={value => setRePassword(value.target.value)}
+                        value={rePassword}
+                    />
+                    <input onClick={onRegister} type="submit" className="fadeIn fourth" defaultValue="Register" />
+                </form>
             </div>
         </div>
-
     )
 };

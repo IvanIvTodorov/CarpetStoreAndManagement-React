@@ -58,9 +58,11 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ isAuth, isAdmin, userProducts }}>
-      <div>
+      <div style={{
+        backgroundColor: 'seashell',
+      }}>
         <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} isAdmin={isAdmin} />
-        <main style={{ minHeight: "517px" }}>
+        <main style={{ minHeight: "517px"}}>
           <Routes>
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />} />

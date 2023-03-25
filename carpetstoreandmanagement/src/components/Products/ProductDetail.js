@@ -50,7 +50,7 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
                 carpets: {
                     [carpetId]:
                     {
-                        qty: 1,
+                        qty: Number(1),
                         imgUrl: carpet.imgUrl,
                         price: carpet.price,
                         name: carpet.name
@@ -64,7 +64,7 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
                     carpets: {
                         [carpetId]:
                         {
-                            qty: 1,
+                            qty: Number(1),
                             imgUrl: carpet.imgUrl,
                             price: carpet.price,
                             name: carpet.name
@@ -83,6 +83,8 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
                 }
             })));
         }
+
+        return alert(`You have successfully added ${carpet.name} to your cart`)
     }
 
     const sendComment = async (e) => {
@@ -116,9 +118,9 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
             <div className='container' style={{ minHeight: '517px' }}>
                 <div className="card">
                     <div className="container-fliud">
-                        <div className="wrapper row">
-                            <div className="preview col-md-6">
-                                <div className="preview-pic tab-content">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <div className="tab-content">
                                     <div className="tab-pane active" id="pic-1">
                                         <img src={carpet.imgUrl} style={{ width: '600px', height: '400px' }} />
                                     </div>
@@ -126,13 +128,14 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
                             </div>
                             <div className="details col-md-6">
                                 <h3 className="product-title">{carpet.name}</h3>
-                                <h2>
-                                    Origin: <span>Bulgaria</span>
-                                </h2>
-                                <h2>
-                                    Price: <span>${carpet.price}</span>
-                                </h2>
                                 <hr />
+                                <h3 className="product-title">
+                                    Origin: <span>Bulgaria</span>
+                                </h3>
+                                <hr />
+                                <h3 className="product-title">
+                                    Price: <span>${carpet.price}</span>
+                                </h3>
                                 <hr />
                                 <div>
                                     <label style={{ fontSize: '25px' }}>Product description:</label>

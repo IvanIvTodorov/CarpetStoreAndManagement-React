@@ -46,6 +46,8 @@ export const Cart = ({ setUserProducts, userProducts }) => {
                 }
             })));
         }
+
+        return alert(`You have successfully removed this item!`)
     }
 
     const increaseAmount = async (value, carpetId) => {
@@ -59,7 +61,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
         const information = await getDoc(document);
 
         updateDoc(document, {
-            [`carpets.${carpetId}.qty`]: value.target.value
+            [`carpets.${carpetId}.qty`]: Number(value.target.value)
         });
 
         const currentInf = await getDoc(document);
@@ -68,7 +70,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
             if (y.id === carpetId) {
                 return {
                     id: y.id,
-                    qty: value.target.value,
+                    qty: Number(value.target.value),
                     price: y.price,
                     imgUrl: y.imgUrl,
                     type: y.type,
@@ -99,6 +101,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
 
         await deleteDoc(document)
         setUserProducts([])
+        alert('You have successfully completed your order !')
         navigate('/myorders')
     }
 
@@ -112,7 +115,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
                                 <tr>
                                     <th>Product</th>
                                     <th>Name</th>
-                                    <th>Quantity</th>
+                                    <th style={{textAlign: 'center'}}>Quantity</th>
                                     <th className="text-center">Price</th>
                                     <th className="text-center">Total</th>
                                     <th>&nbsp;</th>
@@ -133,12 +136,13 @@ export const Cart = ({ setUserProducts, userProducts }) => {
                                                 </Link>
                                             </div>
                                         </td>
-                                        <td className="col-sm-8 col-md-6"><span>{carpet.name}</span></td>
-                                        <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
-                                            <input
+                                        <td className="col-sm-2 col-md-5"><span>{carpet.name}</span></td>
+                                        <td className="col-sm-1 col-md-2" style={{ textAlign: "center" }}>
+                                            <input style={{backgroundColor: 'seashell'}}
                                                 type="number"
-                                                className="form-control"
-                                                defaultValue={carpet.qty}
+                                                className="form-control text-center"
+                                                defaultValue={Number(carpet.qty)}
+                                                min={1}
                                                 onChange={value => increaseAmount(value, carpet.id)}
                                             />
                                         </td>

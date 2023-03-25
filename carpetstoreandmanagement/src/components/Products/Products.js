@@ -71,6 +71,8 @@ export const Products = ({ carpets, isAdmin, setUserProducts, isAuth}) => {
                 }
             })));
         }
+
+        return alert(`You have successfully added ${carpet.name} to your cart`)
     }
 
     return (
@@ -97,10 +99,11 @@ export const Products = ({ carpets, isAdmin, setUserProducts, isAuth}) => {
                                 }
 
                             </div>
-                            <div className="product-content">
-                                <h3 className="title">
+                            <div className="product-content" style={{border: '1px solid black'}}>
+                                <h3 className="title"  >
                                     <Link to={{ pathname: `/details/${carpet.id}` }}>{carpet.name}</Link>
                                 </h3>
+                                <hr/>
                                 <span className="price">${carpet.price}</span>
                             </div>
                         </div>

@@ -1,6 +1,6 @@
 import style from './Edit.Module.css'
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef} from 'react';
 import { updateDoc, doc, getDoc,collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 
@@ -10,8 +10,6 @@ export const Edit = ({setCarpets}) => {
     let navigate = useNavigate();
     const docRef = doc(db, 'carpet', carpetId);
     const carpetCollection = collection(db, 'carpet')
-
-
 
     const name = useRef(null);
     const type = useRef(null);
@@ -43,108 +41,52 @@ export const Edit = ({setCarpets}) => {
     }
 
     return (
-        <div className="container">
-            <div className="row main">
-                <div className="main-login main-center">
-                    <form>
-                        <div className="form-group">
-                            <label htmlFor="email" className="cols-sm-2 control-label">
-                                Name
-                            </label>
-                            <div className="cols-sm-10">
-                                <div className="input-group">
-                                    <span className="input-group-addon">
-                                        <i className="fa fa-envelope fa" aria-hidden="true" />
-                                    </span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="email"
-                                        id="email"
-                                        placeholder="Enter your Email"
-                                        defaultValue={carpet.name}
-                                        ref={name}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="username" className="cols-sm-2 control-label">
-                                Type
-                            </label>
-                            <div className="cols-sm-10">
-                                <div className="input-group">
-                                    <span className="input-group-addon">
-                                        <i className="fa fa-users fa" aria-hidden="true" />
-                                    </span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="username"
-                                        id="username"
-                                        placeholder="Enter your Username"
-                                        defaultValue={carpet.type}
-                                        ref={type}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password" className="cols-sm-2 control-label">
-                                Price
-                            </label>
-                            <div className="cols-sm-10">
-                                <div className="input-group">
-                                    <span className="input-group-addon">
-                                        <i className="fa fa-lock fa-lg" aria-hidden="true" />
-                                    </span>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        name="password"
-                                        id="password"
-                                        placeholder="Enter your Password"
-                                        defaultValue={carpet.price}
-                                        ref={price}
-                                        min={0}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="confirm" className="cols-sm-2 control-label">
-                                Image URL
-                            </label>
-                            <div className="cols-sm-10">
-                                <div className="input-group">
-                                    <span className="input-group-addon">
-                                        <i className="fa fa-lock fa-lg" aria-hidden="true" />
-                                    </span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="confirm"
-                                        id="confirm"
-                                        placeholder="Confirm your Password"
-                                        defaultValue={carpet.imgUrl}
-                                        ref={imgUrl}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group d-flex justify-content-center">
-                            <a
-                                target="_blank"
-                                type="button"
-                                id="button"
-                                className="btn btn-primary btn-lg btn-block login-button"
-                                onClick={onPost}
-                            >
-                                Edit
-                            </a>
-                        </div>
-                    </form>
+        <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
+            <div id="formContent">
+                <div className="fadeIn first">
+                    <h1>Edit design</h1>
                 </div>
+                <form>
+                    <input
+                        type="text"
+                        id="name"
+                        className="fadeIn second"
+                        name="name"
+                        ref={name}
+                        defaultValue={carpet.name}
+                        placeholder="Product name"
+                    />
+                    <input
+                        type="text"
+                        id="type"
+                        className="fadeIn third"
+                        name="type"
+                        ref={type}
+                        defaultValue={carpet.type}
+                        placeholder="Product type"
+
+                    />
+                    <input
+                        type="number"
+                        id="price"
+                        className="fadeIn third"
+                        name="price"
+                        ref={price}
+                        defaultValue={carpet.price}
+                        min={1}
+                        placeholder="Product price"
+                    />
+                    <input
+                        type="text"
+                        id="imgUrl"
+                        className="fadeIn third"
+                        name="imgUrl"
+                        ref={imgUrl}
+                        defaultValue={carpet.imgUrl}
+                        placeholder="Product image URL"
+                    />
+                    <input onClick={onPost} type="submit" className="fadeIn fourth" defaultValue="Register" />
+                </form>
             </div>
         </div>
     );

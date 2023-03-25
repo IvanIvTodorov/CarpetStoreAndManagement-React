@@ -85,6 +85,7 @@ export const Produce = () => {
         });
 
         return alert(`You hace successfully produced ${qty} pcs of ${carpetName}`)
+
     }
 
     const increaseAmount = async (value, carpetId) => {
