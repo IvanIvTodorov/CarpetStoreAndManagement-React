@@ -67,7 +67,7 @@ export const Login = ({ setIsAuth, setIsAdmin }) => {
                     <input onClick={onUserLogin} type="submit" className="fadeIn fourth" defaultValue="Log In" />
                 </form>
                 <div className='loginPage col-md-12 text-center'>
-                    <button className='login-with-google-btn' onClick={signWithGoogle}>Sign in with Google</button>
+                    <button className='login-with-google-btn' onClick={signWithGoogle}>Log in with Google</button>
                 </div>
             </div>
         </div>

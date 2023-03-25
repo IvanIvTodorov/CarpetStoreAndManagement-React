@@ -40,7 +40,7 @@ export const Inventory = () => {
                                 {carpets.map((x, index) => {
                                     return <tr key={index}>
                                         <td>{x.name}</td>
-                                        <td className="col-sm-5 col-md-5">{x.qty}</td>
+                                        <td className="col-sm-5 col-md-5">{x.type}</td>
                                         <td className="col-sm-1 col-md-1">{x.qty}</td>
                                     </tr>
                                 })}

@@ -59,7 +59,7 @@ function App() {
   return (
     <AuthContext.Provider value={{ isAuth, isAdmin, userProducts }}>
       <div style={{
-        backgroundColor: 'seashell',
+        backgroundColor: 'cornsilk',
       }}>
         <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} isAdmin={isAdmin} />
         <main style={{ minHeight: "517px"}}>
