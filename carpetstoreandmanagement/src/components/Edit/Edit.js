@@ -37,7 +37,8 @@ export const Edit = ({setCarpets}) => {
         }).then(async () => {
             const data = await getDocs(carpetCollection)
             setCarpets(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-            navigate('/products')
+            alert('You have successfully edited this product !')
+            navigate(`/products`)
         })
     }
 

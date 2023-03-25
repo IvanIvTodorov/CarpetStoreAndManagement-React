@@ -27,7 +27,7 @@ export const OrderDetails = () => {
     }, [])
     return (
         <>
-            <div className="container">
+            <div className="container" style={{ minHeight: '511px' }}>
                 <div className="row">
                     <div className="span5">
                         <table className="table table-striped table-condensed">

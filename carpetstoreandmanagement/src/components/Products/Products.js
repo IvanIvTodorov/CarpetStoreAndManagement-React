@@ -85,7 +85,7 @@ export const Products = ({ carpets, isAdmin, setUserProducts, isAuth}) => {
                                     <img className="pic-2" style={{ width: '350px', height: '400px' }} src={carpet.imgUrl} />
 
                                 </Link>
-                                {isAuth &&
+                                {isAuth && !isAdmin &&
                                     <Link onClick={e => addProduct(e, carpet.id)} className="add-to-cart" to="">
                                         Add to cart
                                     </Link>

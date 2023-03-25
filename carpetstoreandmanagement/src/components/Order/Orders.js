@@ -64,8 +64,8 @@ export const Orders = ({ userProducts }) => {
         }, arr.push(Object.keys(x)[index]), arrQty.push(z.qty)))));
 
 
-        const alertMsg = 'You do not have enough pcs from '
-        const isAlert = false;
+        let alertMsg = 'You do not have enough pcs from '
+        let isAlert = false;
         for (let index = 0; index < arr.length; index++) {
             const curDocRef = doc(db, 'inventory', arr[index])
             const curDoc = await getDoc(curDocRef);
@@ -76,7 +76,7 @@ export const Orders = ({ userProducts }) => {
             const invQty = carpet.qty;
 
             if (invQty < arrQty[index]) {
-                alertMsg = alertMsg + arrQty[index]
+                alertMsg = alertMsg + arr[index]
                 isAlert = true;
             }
 
@@ -106,12 +106,13 @@ export const Orders = ({ userProducts }) => {
 
             await setDoc(docRef, { isCompleted: true }, { merge: true });
             getOrders()
+            return alert('You have successfuly completed this order !')
         }
 
     }
 
     if (!orders || orders.length === 0) {
-        return <h1 style={{ textAlign: 'center' }}>All orders are completed !</h1>
+        return <h1 style={{ textAlign: 'center', minHeight: '559px' }}>All orders are completed !</h1>
     }
     return (
         <div className="container" style={{ minHeight: '567px' }}>
@@ -122,6 +123,7 @@ export const Orders = ({ userProducts }) => {
                             <tr>
                                 <th>Order Id</th>
                                 <th>Product Id</th>
+                                <th>Product Name</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
                                 <th />
@@ -136,6 +138,11 @@ export const Orders = ({ userProducts }) => {
                                         <td>
                                             {orders[index].map((x, index) => {
                                                 return <div key={index}>{x.id}</div>
+                                            })}
+                                        </td>
+                                        <td>
+                                            {orders[index].map((x, index) => {
+                                                return <div key={index}>{x.name}</div>
                                             })}
                                         </td>
                                         <td>

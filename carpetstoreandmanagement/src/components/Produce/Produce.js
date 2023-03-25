@@ -67,6 +67,7 @@ export const Produce = () => {
 
             await updateDoc(doc(db, 'inventory', carpetId), {
                 qty: curValue + Number(qty),
+                name: carpetName
             })
                 .catch(err => { console.log(err) })
         }
@@ -82,6 +83,8 @@ export const Produce = () => {
         await updateDoc(warpRef, {
             qty: Number(Object.values(warpDocument.data())[0] - Number(qty))
         });
+
+        return alert(`You hace successfully produced ${qty} pcs of ${carpetName}`)
     }
 
     const increaseAmount = async (value, carpetId) => {

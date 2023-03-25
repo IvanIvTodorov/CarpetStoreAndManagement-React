@@ -1,20 +1,28 @@
 import style from './ProductDetails.Module.css'
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db, auth } from '../../firebase';
-import { getDoc, doc, deleteDoc, collection, addDoc, updateDoc, setDoc } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc, collection, addDoc, updateDoc, setDoc, getDocs, query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, isAuth }) => {
     const [carpet, setCarpet] = useState({})
+    const [comment, setComment] = useState('');
+    const [comments, setComments] = useState([]);
     const { carpetId } = useParams();
 
     const docRef = doc(db, 'carpet', carpetId);
     let navigate = useNavigate();
+    const commentCollection = collection(db, 'comments')
 
     useEffect(() => {
         const getCarpet = async () => {
             const data = await getDoc(docRef);
-            setCarpet(data.data())
+            setCarpet({...data.data()});
+            const curComments = query(commentCollection, where("carpetId", "==", carpetId));
+            const filteredComments = await getDocs(curComments)
+
+
+            setComments(filteredComments.docs.map(doc => ({ ...doc.data(), commentId: doc.id })))
         };
 
         getCarpet();
@@ -24,6 +32,7 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
         e.preventDefault();
         await deleteDoc(docRef)
         setCarpets(carpets => (carpets.filter(x => x.id != carpetId)))
+        alert('You have successfully deleted this item !')
         navigate('/products')
     }
 
@@ -76,58 +85,134 @@ export const ProductDetail = ({ isAdmin, setCarpets, carpets, setUserProducts, i
         }
     }
 
+    const sendComment = async (e) => {
+        e.preventDefault()
+
+        addDoc(commentCollection, {
+            text: comment,
+            carpetId: carpetId,
+            userId: auth.currentUser.uid,
+            email: auth.currentUser.email[0].toUpperCase()
+        }).then(async () => {
+            const curComments = query(commentCollection, where("carpetId", "==", carpetId));
+            const filteredComments = await getDocs(curComments)
+
+            setComments(filteredComments.docs.map(doc => ({ ...doc.data(), commentId: doc.id })))
+            setComment('')
+        })
+    }
+
+    const onDeleteComment = async (e, commentId) => {
+        e.preventDefault();
+        await deleteDoc(doc(db, 'comments', commentId));
+
+        const curComments = query(commentCollection, where("carpetId", "==", carpetId));
+        const filteredComments = await getDocs(curComments)       
+        setComments(filteredComments.docs.map(doc => ({ ...doc.data(), commentId: doc.id  })))
+    }
+
     return (
-        <div className='container' style={{ minHeight: '567px' }}>
-            <div className="card">
-                <div className="container-fliud">
-                    <div className="wrapper row">
-                        <div className="preview col-md-6">
-                            <div className="preview-pic tab-content">
-                                <div className="tab-pane active" id="pic-1">
-                                    <img src={carpet.imgUrl} style={{ width: '600px', height: '400px' }} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="details col-md-6">
-                            <h3 className="product-title">{carpet.name}</h3>
-                            <h2>
-                                Origin: <span>Bulgaria</span>
-                            </h2>
-                            <h2>
-                                Price: <span>${carpet.price}</span>
-                            </h2>
-                            <hr />
-                            <hr />
-                            <div>
-                                <label style={{ fontSize: '25px' }}>Product description:</label>
-                                <p className="product-description" >
-                                    Polyester machine made carpet from the highest quality !
-                                </p>
-                            </div>
-                            <hr />
-                            {isAuth && !isAdmin &&
-                                <div className="action">
-                                    <button onClick={addProduct} className="add-to-cart btn btn-default" type="button">
-                                        Add to cart
-                                    </button>
-                                </div>
-                            }   
-                            {isAdmin &&
-                                <div className="action">
-                                    <div className='d-flex justify-content-between'>
-                                        <Link to={{ pathname: `/edit/${carpetId}` }} style={{ border: 'solid black', marginLeft: '50px' }} className="add-to-cart btn" type="button">
-                                            Edit
-                                        </Link>
-                                        <button style={{ border: 'solid black', marginRight: '50px' }} className="add-to-cart btn" type="button" onClick={onDelete}>
-                                            Delete
-                                        </button>
+        <>
+            <div className='container' style={{ minHeight: '517px' }}>
+                <div className="card">
+                    <div className="container-fliud">
+                        <div className="wrapper row">
+                            <div className="preview col-md-6">
+                                <div className="preview-pic tab-content">
+                                    <div className="tab-pane active" id="pic-1">
+                                        <img src={carpet.imgUrl} style={{ width: '600px', height: '400px' }} />
                                     </div>
                                 </div>
-                            }
+                            </div>
+                            <div className="details col-md-6">
+                                <h3 className="product-title">{carpet.name}</h3>
+                                <h2>
+                                    Origin: <span>Bulgaria</span>
+                                </h2>
+                                <h2>
+                                    Price: <span>${carpet.price}</span>
+                                </h2>
+                                <hr />
+                                <hr />
+                                <div>
+                                    <label style={{ fontSize: '25px' }}>Product description:</label>
+                                    <p className="product-description" >
+                                        Polyester machine made carpet from the highest quality !
+                                    </p>
+                                </div>
+                                <hr />
+                                {isAuth && !isAdmin &&
+                                    <div className="action">
+                                        <button onClick={addProduct} className="add-to-cart btn btn-default" type="button">
+                                            Add to cart
+                                        </button>
+                                    </div>
+                                }
+                                {isAdmin &&
+                                    <div className="action">
+                                        <div className='d-flex justify-content-between'>
+                                            <Link to={{ pathname: `/edit/${carpetId}` }} style={{ border: 'solid black', marginLeft: '50px' }} className="add-to-cart btn" type="button">
+                                                Edit
+                                            </Link>
+                                            <button style={{ border: 'solid black', marginRight: '50px' }} className="add-to-cart btn" type="button" onClick={onDelete}>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div className="container my-2">
+                <h1 style={{ textAlign: 'center' }}>Leave a comment</h1>
+                <div className="row mt-4 d-flex justify-content-center">
+                    <div className="col-md-9">
+                        <form className=" reply-form ">
+                            <div className="commentBox">
+                                <ul className="list-unstyled">
+                                    {comments.map((x, index) => {
+                                        return <li key={index}>
+                                            <span className="profileBox">{x.email}</span>{" "}
+                                            <span className="profileText">
+                                                {x.text}
+                                            </span>
+                                            {x.userId === auth.currentUser.uid &&
+                                                <button style={{ border: 'solid black' }} className="btn btn-danger float-right" type="button" onClick={e => onDeleteComment(e, x.commentId)}>
+                                                    Delete
+                                                </button>
+                                            }
+
+                                        </li>
+                                    })}
+
+                                </ul>
+                            </div>
+                            <div id="div_id_username" className="form-group required">
+                                <div className="controls form-group d-flex w-100 ">
+                                    <input
+                                        className="input-md  textinput textInput form-control"
+                                        id="id_username"
+                                        placeholder="Write your review"
+                                        type="text"
+                                        onChange={(value) => setComment(value.target.value)}
+                                        value={comment}
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="btn btn-info border-radius-0  m-0 w-25"
+                                        onClick={sendComment}
+                                    >
+                                        Send
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };

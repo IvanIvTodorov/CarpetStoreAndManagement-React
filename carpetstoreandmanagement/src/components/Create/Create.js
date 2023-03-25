@@ -4,7 +4,7 @@ import { addDoc, collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 
-export const Create = ({ isAdmin, isAuth,setCarpets }) => {
+export const Create = ({ isAdmin, isAuth, setCarpets }) => {
     const name = useRef(null);
     const type = useRef(null);
     const price = useRef(null);
@@ -22,6 +22,7 @@ export const Create = ({ isAdmin, isAuth,setCarpets }) => {
         }).then(async () => {
             const data = await getDocs(carpetCollection)
             setCarpets(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            alert(`You hace successfully created new design !`)
             navigate('/products')
         })
     }
@@ -29,7 +30,7 @@ export const Create = ({ isAdmin, isAuth,setCarpets }) => {
     useEffect(() => {
         if (isAuth && !isAdmin) {
             navigate('/')
-        }else if (!isAdmin || !isAuth) {
+        } else if (!isAdmin || !isAuth) {
             navigate('/login')
         }
     }, []);

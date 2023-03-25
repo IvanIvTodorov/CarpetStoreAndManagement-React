@@ -87,6 +87,8 @@ export const ProduceFromOrder = () => {
         await updateDoc(warpRef, {
             qty: Number(Object.values(warpDocument.data())[0] - Number(qty))
         });
+
+        return alert(`You hace successfully produced ${qty} pcs of ${carpetName}`)
     }
 
     return (

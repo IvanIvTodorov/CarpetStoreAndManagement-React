@@ -12,6 +12,10 @@ export const RawMaterials = () => {
     const [weft, setWeft] = useState(1);
 
     const increaseAmount = async (value, rawMaterial) => {
+        if (value.target.value < 1) {
+            value.target.value = 1;
+            return alert('Quantity should be higher than 0 !')
+        }
         if (rawMaterial == "yarn") {
             setYarn(value.target.value)
         }else if(rawMaterial == "warp"){
@@ -28,6 +32,8 @@ export const RawMaterials = () => {
         await updateDoc(weftRef, {
             qty: Number(Object.values(document.data())[0] + Number(weft))
         });
+
+        return alert(`You have successfuly bought ${Number(weft)} pcs of weft !`)
     }
     const buyYarn = async () => {
         const yarnRef = doc(db, 'rawMaterials', 'yarn');
@@ -36,6 +42,8 @@ export const RawMaterials = () => {
         await updateDoc(yarnRef, {
             qty: Number(Object.values(document.data())[0] + Number(yarn))
         });
+
+        return alert(`You have successfuly bought ${Number(yarn)} pcs of yarn !`)
     }
     const buyWarp = async () => {
         const warpRef = doc(db, 'rawMaterials', 'warp');
@@ -44,11 +52,13 @@ export const RawMaterials = () => {
         await updateDoc(warpRef, {
             qty: Number(Object.values(document.data())[0] + Number(warp))
         });
+
+        return alert(`You have successfuly bought ${Number(warp)} pcs of warp !`)
     }
     
     return (
-        <div className='container'>
-            <div className="row d-flex justify-content-center">
+        <div className='container' style={{ minHeight: '567px' }}>
+            <div className="row d-flex justify-content-center" >
                 <div className="col-md-3 col-sm-6">
                     <div className="product-grid2">
                         <div className="product-image2">

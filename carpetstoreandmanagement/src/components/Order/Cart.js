@@ -123,14 +123,14 @@ export const Cart = ({ setUserProducts, userProducts }) => {
                                     return <tr key={carpet.id}>
                                         <td className="col-sm-1 col-md-1">
                                             <div className="media">
-                                                <a className="thumbnail pull-left" href="#">
+                                                <Link className="thumbnail pull-left" to={`/details/${carpet.id}`}>
                                                     {" "}
                                                     <img
                                                         className="media-object"
                                                         src={carpet.imgUrl}
                                                         style={{ width: 72, height: 72 }}
                                                     />{" "}
-                                                </a>
+                                                </Link>
                                             </div>
                                         </td>
                                         <td className="col-sm-8 col-md-6"><span>{carpet.name}</span></td>
