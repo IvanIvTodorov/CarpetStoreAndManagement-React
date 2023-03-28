@@ -79,10 +79,10 @@ export const Products = ({ carpets, setUserProducts}) => {
     }
 
     return (
-        <div className='container' style={{ minHeight: '567px' }}>
+        <div className='container' style={{ minHeight: '567px'}}>
             <div className="row">
                 {carpets.length > 0 ? carpets.map((carpet) => {
-                    return <div key={carpet.id} className="col-md-3 col-sm-6">
+                    return <div key={carpet.id} className="col-md-3 col-sm-6" style={{marginBottom: '25px', marginTop: '25px'}}>
                         <div className="product-grid2">
                             <div className="product-image2">
                                 <Link to={{ pathname: `/details/${carpet.id}` }}>

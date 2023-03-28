@@ -8,7 +8,7 @@ export const Orders = () => {
     const [orders, setOrders] = useState([])
     const [orderId, setOrdersId] = useState([]);
     const navigate = useNavigate();
-    const {isAdmin, isAuth} = useContext(AuthContext);
+    const { isAdmin, isAuth } = useContext(AuthContext);
 
     useEffect(() => {
         if (isAuth && !isAdmin) {
@@ -69,7 +69,7 @@ export const Orders = () => {
         delete filter.isCompleted;
         let arr = [];
         let arrQty = [];
-        const products = Object.values(filter).map(x => (Object.values(x).map((z, index) => ({
+        Object.values(filter).map(x => (Object.values(x).map((z, index) => ({
             ...z, id: Object.keys(x)[index]
         }, arr.push(Object.keys(x)[index]), arrQty.push(z.qty)))));
 
@@ -126,7 +126,10 @@ export const Orders = () => {
     }
 
     if (!orders || orders.length === 0) {
-        return <h1 style={{ textAlign: 'center', minHeight: '559px' }}>All orders are completed !</h1>
+        return <div style={{minHeight: '567px' }}>
+            <h1 className="alert alert-danger" style={{ textAlign: 'center'}}>All orders are completed !</h1>
+        </div>
+
     }
     return (
         <div className="container" style={{ minHeight: '567px' }}>

@@ -11,7 +11,7 @@ export const ProductDetail = ({ setCarpets, setUserProducts}) => {
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
     const { carpetId } = useParams();
-    const {isAdmin, isAuth} = useContext(AuthContext)
+    const {isAdmin, isAuth} = useContext(AuthContext) 
 
     const docRef = doc(db, 'carpet', carpetId);
     let navigate = useNavigate();
@@ -133,19 +133,16 @@ export const ProductDetail = ({ setCarpets, setUserProducts}) => {
                                 <h3 className="product-title">Name: {carpet.name}</h3>
                                 <hr />
                                 <h3 className="product-title">
-                                    Origin: <span>Bulgaria</span>
-                                </h3>
-                                <hr />
-                                <h3 className="product-title">
                                     Price: <span>${carpet.price}</span>
                                 </h3>
                                 <hr />
-                                <div>
-                                    <label style={{ fontSize: '25px' }}>Product description:</label>
-                                    <p className="product-description" >
-                                        Polyester machine made carpet from the highest quality !
-                                    </p>
-                                </div>
+                                <h3 className="product-title">
+                                    Type: <span> {carpet.type}</span>
+                                </h3>
+                                <hr />
+                                <h3 className="product-title">
+                                    Origin: <span>Bulgaria</span>
+                                </h3>
                                 <hr />
                                 {isAuth && !isAdmin &&
                                     <div className="action">

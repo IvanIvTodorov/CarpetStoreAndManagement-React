@@ -68,9 +68,9 @@ export const OrderDetails = () => {
             </div>
             {
                 orderStatus ?
-                    <h1 style={{ textAlign: 'center' }}>Your order has been sent !</h1>
+                    <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>Your order has been sent !</h1>
                     :
-                    <h1 style={{ textAlign: 'center' }}>We are preparing your order!</h1>
+                    <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>We are preparing your order!</h1>
             }
         </>
     );

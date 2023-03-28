@@ -39,6 +39,7 @@ function App() {
 
       const carpetCollection2 = collection(db, 'userProducts')
       const data3 = await getDocs(carpetCollection2)
+
       let userId = auth.currentUser.uid
       const document = doc(db, 'userProducts', userId)
       const data2 = await getDoc(document);

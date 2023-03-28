@@ -86,7 +86,7 @@ export const MyOrders = () => {
         return (
 
             <div style={{ minHeight: '567px' }}>
-                <h1 style={{ textAlign: 'center' }}>
+                <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>
                     Your do not have any orders!
                 </h1>
                 <div className="d-flex justify-content-center">

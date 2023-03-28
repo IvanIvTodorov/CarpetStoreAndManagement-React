@@ -17,6 +17,7 @@ export const Edit = ({setCarpets}) => {
     const type = useRef(null);
     const price = useRef(null);
     const imgUrl = useRef(null);
+    const [error, setError] = useState([]);
     const {isAdmin, isAuth} = useContext(AuthContext)
     
     useEffect(() => {
@@ -30,13 +31,35 @@ export const Edit = ({setCarpets}) => {
             setCarpet(data.data())
         };
 
-        
-
         getCarpet();
     }, [])
 
     const onPost = async (e) => {
         e.preventDefault();
+
+        let errMsg = []
+        if (!name || name.current.value.length <= 0 || name.current.value.length > 10) {
+            errMsg.push('Name length should be between 0 and 10');
+        }
+
+        if (!type || type.current.value.length <= 0 || type.current.value.length > 10) {
+            errMsg.push('Type length should be between 0 and 10')
+        }
+
+        if (!price || !Number(price.current.value) || Number(price.current.value) <= 0) {
+            errMsg.push('Price should be a positive number')
+        }
+
+        if (!imgUrl || imgUrl.current.value.length <= 0) {
+            errMsg.push('ImageUrl length should be higher than 0')
+        }
+
+        if (errMsg.length > 0) {
+           return setError(errMsg);
+        }else{
+            setError([])
+        }
+
         await updateDoc(docRef, {
             name: name.current.value,
             type: type.current.value,
@@ -51,7 +74,18 @@ export const Edit = ({setCarpets}) => {
     }
 
     return (
-        <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
+        <>  {error.length > 0 && error &&
+            <div className="alert alert-danger text-center">
+                {error.map(e => {
+                    return <>
+                        <strong>{e}</strong>
+                        <br/>
+                    </>
+                })}
+            </div>
+            }
+            
+            <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
             <div id="formContent">
                 <div className="fadeIn first">
                     <h1>Edit design</h1>
@@ -99,5 +133,7 @@ export const Edit = ({setCarpets}) => {
                 </form>
             </div>
         </div>
+        </>
+        
     );
 };

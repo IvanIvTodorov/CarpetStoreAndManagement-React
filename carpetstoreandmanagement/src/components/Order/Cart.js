@@ -193,8 +193,8 @@ export const Cart = ({ setUserProducts, userProducts }) => {
         return (
 
             <div style={{ minHeight: '567px' }}>
-                <h1 style={{ textAlign: 'center' }}>
-                    Your shopping cart is Empty!
+                <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>
+                    Your shopping cart is empty!
                 </h1>
                 <div className="d-flex justify-content-center">
                     <Link style={{ textAlign: "center" }} to="/products">

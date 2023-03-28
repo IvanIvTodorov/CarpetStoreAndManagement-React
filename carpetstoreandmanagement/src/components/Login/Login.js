@@ -8,6 +8,7 @@ import { useState } from 'react';
 export const Login = ({ setIsAuth, setIsAdmin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     let navigate = useNavigate();
 
     const signWithGoogle = () => {
@@ -25,51 +26,58 @@ export const Login = ({ setIsAuth, setIsAdmin }) => {
 
 
     const onUserLogin = (e) => {
-        e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
+        try {
+            e.preventDefault();
+            signInWithEmailAndPassword(auth, email, password)
             .then((result) => {
                 localStorage.setItem("isAuth", true);
                 setIsAuth(true)
                 navigate("/")
             })
             .catch((error) => {
-                console.log(error);
-            })
+                setError('Invalid username or password !')
+            })         
+        } catch (error) {
+            setError('Invalid username or password !')
+        }     
     }
 
 
 
     return (
-        <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
-            <div id="formContent">
-                <div className="fadeIn first">
-                    <h1>Login</h1>
+        <>  {error &&
+                <div className="alert alert-danger text-center">
+                    <strong>{error}</strong>
                 </div>
-                <form>
-                    <input
-                        type="text"
-                        id="login"
-                        className="fadeIn second"
-                        name="login"
-                        placeholder="Type your email"
-                        onChange={value => setEmail(value.target.value)}
-                        value={email}
-                    />
-                    <input
-                        type="password"
-                        id="password"
-                        className="fadeIn third"
-                        name="login"
-                        placeholder="Type your password"
-                        onChange={value => setPassword(value.target.value)}
-                        value={password}
-                    />
-                    <input onClick={onUserLogin} type="submit" className="fadeIn fourth" defaultValue="Log In" />
-                </form>
-                <div className='loginPage col-md-12 text-center'>
-                    <button className='login-with-google-btn' onClick={signWithGoogle}>Log in with Google</button>
+            }
+            <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
+                <div id="formContent">
+                    <div className="fadeIn first">
+                        <h1>Login</h1>
+                    </div>
+                    <form>
+                        <input
+                            type="text"
+                            className="fadeIn second"
+                            placeholder="Type your email"
+                            onChange={value => setEmail(value.target.value)}
+                            value={email}
+                        />
+                        <input
+                            type="password"
+                            className="fadeIn third"
+                            placeholder="Type your password"
+                            onChange={value => setPassword(value.target.value)}
+                            value={password}
+                        />
+                        <input onClick={onUserLogin} type="submit" className="fadeIn fourth" defaultValue="Log In" />
+                    </form>
+                    <div className='loginPage col-md-12 text-center'>
+                        <button className='login-with-google-btn' onClick={signWithGoogle}>Log in with Google</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
+
     )
 };
