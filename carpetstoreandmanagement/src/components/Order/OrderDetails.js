@@ -9,8 +9,8 @@ export const OrderDetails = () => {
     const [userOrders, setUserOrders] = useState([])
     const [orderStatus, setOrderStatus] = useState(null);
     const navigate = useNavigate();
-    const {isAuth} = useContext(AuthContext);
-    
+    const { isAuth } = useContext(AuthContext);
+
     useEffect(() => {
         if (!isAuth) {
             navigate('/login')
@@ -33,6 +33,12 @@ export const OrderDetails = () => {
     }, [])
     return (
         <>
+            {
+                orderStatus ?
+                    <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>Your order has been sent !</h1>
+                    :
+                    <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>We are preparing your order!</h1>
+            }
             <div className="container" style={{ minHeight: '511px' }}>
                 <div className="row">
                     <div className="span5">
@@ -66,12 +72,6 @@ export const OrderDetails = () => {
                     </div>
                 </div>
             </div>
-            {
-                orderStatus ?
-                    <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>Your order has been sent !</h1>
-                    :
-                    <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>We are preparing your order!</h1>
-            }
         </>
     );
 };

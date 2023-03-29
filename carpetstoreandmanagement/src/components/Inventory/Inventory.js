@@ -12,7 +12,7 @@ export const Inventory = () => {
 
     useEffect(() => {
         if (isAuth && !isAdmin) {
-            navigate('/')
+            navigate('/forbiden')
         } else if (!isAdmin || !isAuth) {
             navigate('/login')
         }
@@ -82,7 +82,6 @@ export const Inventory = () => {
                     </div>
                 </div>
             </div>
-
         </Fragment>
     );
 };

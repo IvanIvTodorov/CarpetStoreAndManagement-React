@@ -1,5 +1,5 @@
 import style from './Create.Module.css'
-import { useContext, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { addDoc, collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
@@ -59,7 +59,7 @@ export const Create = ({ setCarpets }) => {
 
     useEffect(() => {
         if (isAuth && !isAdmin) {
-            navigate('/')
+            navigate('/forbiden')
         } else if (!isAdmin || !isAuth) {
             navigate('/login')
         }
@@ -68,16 +68,16 @@ export const Create = ({ setCarpets }) => {
     return (
         <>{error.length > 0 && error &&
             <div className="alert alert-danger text-center">
-                {error.map(e => {
-                    return <>
+                {error.map((e, index) => {
+                    return <Fragment key={index}>
                         <strong>{e}</strong>
                         <br/>
-                    </>
+                    </Fragment>
                 })}
             </div>
             }
 
-            <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
+            <div className="wrapper fadeInDown" style={{ minHeight: '551px' }}>
                 <div id="formContent">
                     <div className="fadeIn first">
                         <h1>Create design</h1>

@@ -50,7 +50,7 @@ export const Login = ({ setIsAuth, setIsAdmin }) => {
                     <strong>{error}</strong>
                 </div>
             }
-            <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
+            <div className="wrapper fadeInDown" style={{ minHeight: '551px' }}>
                 <div id="formContent">
                     <div className="fadeIn first">
                         <h1>Login</h1>

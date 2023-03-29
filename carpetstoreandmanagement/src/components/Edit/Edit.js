@@ -1,6 +1,6 @@
 import style from './Edit.Module.css'
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useRef, useContext} from 'react';
+import { useState, useEffect, useRef, useContext, Fragment} from 'react';
 import { updateDoc, doc, getDoc,collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 
@@ -22,12 +22,18 @@ export const Edit = ({setCarpets}) => {
     
     useEffect(() => {
         if (isAuth && !isAdmin) {
-            navigate('/')
+            navigate('/forbiden')
         } else if (!isAdmin || !isAuth) {
             navigate('/login')
         }
+
         const getCarpet = async () => {
             const data = await getDoc(docRef);
+
+            if (!data.exists()) {
+                return navigate('/*')
+            }
+
             setCarpet(data.data())
         };
 
@@ -76,16 +82,16 @@ export const Edit = ({setCarpets}) => {
     return (
         <>  {error.length > 0 && error &&
             <div className="alert alert-danger text-center">
-                {error.map(e => {
-                    return <>
+                {error.map((e, index) => {
+                    return <Fragment key={index}>
                         <strong>{e}</strong>
                         <br/>
-                    </>
+                    </Fragment>
                 })}
             </div>
             }
             
-            <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
+            <div className="wrapper fadeInDown" style={{ minHeight: '551px' }}>
             <div id="formContent">
                 <div className="fadeIn first">
                     <h1>Edit design</h1>

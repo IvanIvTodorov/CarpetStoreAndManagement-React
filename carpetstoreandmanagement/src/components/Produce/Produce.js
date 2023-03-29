@@ -11,7 +11,7 @@ export const Produce = () => {
 
     useEffect(() => {
         if (isAuth && !isAdmin) {
-            navigate('/')
+            navigate('/forbiden')
         } else if (!isAdmin || !isAuth) {
             navigate('/login')
         }

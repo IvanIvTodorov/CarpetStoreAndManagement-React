@@ -49,7 +49,7 @@ export const MyOrders = () => {
 
     if (userOrders.length > 0) {
         return (
-            <div className="container" style={{ minHeight: '567px' }}>
+            <div className="container" style={{ minHeight: '551px' }}>
                 <div className="row">
                     <div className="span5">
                         <table className="table table-striped table-condensed">
@@ -67,7 +67,7 @@ export const MyOrders = () => {
                                     return <tr key={index}>
                                         <td>{orderIds[index]}</td>
                                         <td>{dates[index]}</td>
-                                        <td>{total}</td>
+                                        <td>$ {total}</td>
                                         <td>
                                             <Link to={`/myorders/${orderIds[index]}`}>
                                                 Order details
@@ -85,9 +85,9 @@ export const MyOrders = () => {
     }else {
         return (
 
-            <div style={{ minHeight: '567px' }}>
+            <div style={{ minHeight: '551px' }}>
                 <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>
-                    Your do not have any orders!
+                    You do not have any orders!
                 </h1>
                 <div className="d-flex justify-content-center">
                     <Link style={{ textAlign: "center" }} to="/products">

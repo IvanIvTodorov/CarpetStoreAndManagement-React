@@ -16,7 +16,7 @@ export const RawMaterials = () => {
 
     useEffect(() => {
         if (isAuth && !isAdmin) {
-            navigate('/')
+            navigate('/forbiden')
         } else if (!isAdmin || !isAuth) {
             navigate('/login')
         }
@@ -68,7 +68,7 @@ export const RawMaterials = () => {
     }
 
     return (
-        <div className='container' style={{ minHeight: '567px' }}>
+        <div className='container' style={{ minHeight: '551px' }}>
             <div className="row d-flex justify-content-center" >
                 <div className="col-md-3 col-sm-6">
                     <div className="product-grid2">

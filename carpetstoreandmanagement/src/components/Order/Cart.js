@@ -70,8 +70,6 @@ export const Cart = ({ setUserProducts, userProducts }) => {
             [`carpets.${carpetId}.qty`]: Number(value.target.value)
         });
 
-        const currentInf = await getDoc(document);
-
         const carpet = userProducts.map(y => {
             if (y.id === carpetId) {
                 return {
@@ -113,7 +111,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
 
     if (userProducts.length > 0) {
         return (
-            <div className="container" style={{ minHeight: '567px' }}>
+            <div className="container" style={{ minHeight: '551px' }}>
                 <div className="row d-flex justify-content-center">
                     <div className="col-sm-12 col-md-10 col-md-offset-1">
                         <table className="table table-hover">
@@ -192,7 +190,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
     } else {
         return (
 
-            <div style={{ minHeight: '567px' }}>
+            <div style={{ minHeight: '551px' }}>
                 <h1 className="alert alert-danger" style={{ textAlign: 'center' }}>
                     Your shopping cart is empty!
                 </h1>

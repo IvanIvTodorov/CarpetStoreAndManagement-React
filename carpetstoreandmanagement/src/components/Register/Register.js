@@ -37,7 +37,7 @@ export const Register = () => {
                     <strong>{error}</strong>
                 </div>
             }
-            <div className="wrapper fadeInDown" style={{ minHeight: '567px' }}>
+            <div className="wrapper fadeInDown" style={{ minHeight: '551px' }}>
                 <div id="formContent">
                     <div className="fadeIn first">
                         <h1>Register</h1>
@@ -54,7 +54,6 @@ export const Register = () => {
                         />
                         <input
                             type="password"
-                            id="password"
                             className="fadeIn third"
                             name="login"
                             placeholder="Type your password"
@@ -64,7 +63,6 @@ export const Register = () => {
 
                         <input
                             type="password"
-                            id="password"
                             className="fadeIn third"
                             name="login"
                             placeholder="Confirm your password"

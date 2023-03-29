@@ -12,7 +12,7 @@ export const Orders = () => {
 
     useEffect(() => {
         if (isAuth && !isAdmin) {
-            navigate('/')
+            navigate('/forbiden')
         } else if (!isAdmin || !isAuth) {
             navigate('/login')
         }
@@ -126,13 +126,13 @@ export const Orders = () => {
     }
 
     if (!orders || orders.length === 0) {
-        return <div style={{minHeight: '567px' }}>
+        return <div style={{minHeight: '551px' }}>
             <h1 className="alert alert-danger" style={{ textAlign: 'center'}}>All orders are completed !</h1>
         </div>
 
     }
     return (
-        <div className="container" style={{ minHeight: '567px' }}>
+        <div className="container" style={{ minHeight: '551px' }}>
             <div className="row">
                 <div className="span5">
                     <table className="table table-striped table-condensed">
