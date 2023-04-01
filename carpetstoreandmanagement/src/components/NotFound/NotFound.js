@@ -28,7 +28,7 @@ export const NotFound = () => {
                             </div>
                             <h4>Oops! This page Could Not Be Found!</h4>
                             <p>
-                                Sorry bit the page you are looking for does not exist.
+                                Sorry but the page you are looking for does not exist.
                             </p>
                             <Link to='/' className="btn btn-primary btn-round">
                                 Go to homepage

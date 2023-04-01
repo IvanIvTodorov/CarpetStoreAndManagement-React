@@ -13,6 +13,7 @@ export const RawMaterials = () => {
     const [weft, setWeft] = useState(1);
     const { isAuth, isAdmin } = useContext(AuthContext);
     const navigate = useNavigate();
+    const budgetRef = doc(db, 'budget', 'budget');
 
     useEffect(() => {
         if (isAuth && !isAdmin) {
@@ -40,31 +41,67 @@ export const RawMaterials = () => {
         const weftRef = doc(db, 'rawMaterials', 'weft');
         const document = await getDoc(weftRef);
 
-        await updateDoc(weftRef, {
-            qty: Number(Object.values(document.data())[0] + Number(weft))
-        });
 
-        return alert(`You have successfuly bought ${Number(weft)} pcs of weft !`)
+        const budget = (await getDoc(budgetRef)).data();
+        const newBudget = Number(budget.budget) - Number(weft)
+
+        if (newBudget < 0) {
+            alert('You do not have enough budget...')
+        } else {
+            await updateDoc(weftRef, {
+                qty: Number(Object.values(document.data())[0] + Number(weft))
+            });
+
+            updateDoc(budgetRef, {
+                [`budget`]: newBudget
+            });
+
+            alert(`You have successfuly bought ${Number(weft)} pcs of weft!`)
+        }
     }
+
     const buyYarn = async () => {
         const yarnRef = doc(db, 'rawMaterials', 'yarn');
         const document = await getDoc(yarnRef);
 
-        await updateDoc(yarnRef, {
-            qty: Number(Object.values(document.data())[0] + Number(yarn))
-        });
+        const budget = (await getDoc(budgetRef)).data();
+        const newBudget = Number(budget.budget) - Number(yarn)
 
-        return alert(`You have successfuly bought ${Number(yarn)} pcs of yarn !`)
+        if (newBudget < 0) {
+            alert('You do not have enough budget...')
+        } else {
+            await updateDoc(yarnRef, {
+                qty: Number(Object.values(document.data())[0] + Number(yarn))
+            });
+
+            updateDoc(budgetRef, {
+                [`budget`]: newBudget
+            });
+
+            alert(`You have successfuly bought ${Number(yarn)} pcs of yarn!`)
+        }
     }
+
     const buyWarp = async () => {
         const warpRef = doc(db, 'rawMaterials', 'warp');
         const document = await getDoc(warpRef);
 
-        await updateDoc(warpRef, {
-            qty: Number(Object.values(document.data())[0] + Number(warp))
-        });
+        const budget = (await getDoc(budgetRef)).data();
+        const newBudget = Number(budget.budget) - Number(warp)
 
-        return alert(`You have successfuly bought ${Number(warp)} pcs of warp !`)
+        if (newBudget < 0) {
+            alert('You do not have enough budget...')
+        } else {
+            await updateDoc(warpRef, {
+                qty: Number(Object.values(document.data())[0] + Number(warp))
+            });
+
+            updateDoc(budgetRef, {
+                [`budget`]: newBudget
+            });
+
+            alert(`You have successfuly bought ${Number(warp)} pcs of warp !`)
+        }
     }
 
     return (

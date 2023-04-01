@@ -1,12 +1,14 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { db } from '../../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export const Inventory = () => {
     const [carpets, setCarpets] = useState([]);
     const [rawMaterials, setRawMaterials] = useState([]);
+    const [budget, setBudget] = useState('');
+
     const { isAuth, isAdmin } = useContext(AuthContext)
     const navigate = useNavigate();
 
@@ -23,9 +25,12 @@ export const Inventory = () => {
             const rawRef = collection(db, "rawMaterials");
             const rawDoc = await getDocs(rawRef);
 
+            const budgetRef = doc(db, 'budget', 'budget');
+            const budgetDoc = (await getDoc(budgetRef)).data();
+
             setRawMaterials(rawDoc.docs.map((doc) => ({ ...doc.data(), type: doc.id })))
             setCarpets(document.docs.map((doc) => ({ ...doc.data() })));
-
+            setBudget(budgetDoc.budget)
         }
 
         getCarpets();
@@ -34,6 +39,7 @@ export const Inventory = () => {
     return (
         <Fragment>
             <div className="container" style={{ minHeight: '332px' }}>
+                <div><span style={{ fontWeight: 'bold' }} >Company budget: $ {budget}</span></div>
                 <h1 style={{ textAlign: 'center' }}>Products</h1>
                 <div className="row">
                     <div className="span5 d-flex justify-content-center">

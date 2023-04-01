@@ -106,6 +106,15 @@ export const Cart = ({ setUserProducts, userProducts }) => {
         await deleteDoc(document)
         setUserProducts([])
         alert('You have successfully completed your order !')
+
+        const budgetRef = doc(db, 'budget', 'budget');
+        const budget = (await getDoc(budgetRef)).data();
+        const newBudget = Number(budget.budget) + Number(totalPrice) 
+
+        updateDoc(budgetRef, {
+            [`budget`]: newBudget
+        });
+
         navigate('/myorders')
     }
 

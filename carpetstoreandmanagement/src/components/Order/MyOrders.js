@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db, auth } from "../../firebase";
 import { useState, Fragment, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,19 +10,21 @@ export const MyOrders = () => {
     const [dates, setDates] = useState([]);
     const navigate = useNavigate();
     const {isAuth} = useContext(AuthContext);
-
+    const [orderIdsCollection, setOrderIdsCollection] = useState([]);
     useEffect(() => {
         if (!isAuth) {
             navigate('/login')
         }
         const getOrders = async () => {
-            const carpetCollection = collection(db, 'orders')
+            const carpetCollection = query(collection(db, 'orders'), orderBy("dateOforder"))
             const data = await getDocs(carpetCollection)
             const userId = auth.currentUser.uid;
             setOrderIds(data.docs.map(d => d.id))
             const orders = data.docs.map(d => ({ ...d.data() }));
+            
             const filteredOrders = [];
             const dateOforders = [];
+            const id = []
             for (let index = 0; index < orders.length; index++) {
 
                 const el = orders[index];
@@ -33,9 +35,11 @@ export const MyOrders = () => {
                 if (el.hasOwnProperty(userId)) {
 
                     filteredOrders.push(el);
+                    id.push(index)
                 }
             }
-            
+
+            setOrderIdsCollection(id)
             setDates(dateOforders)
             setUserOrders(filteredOrders.map(x => Object.entries(x).map(y => Object.values(y[1]).map((z, index) =>
             ({
@@ -62,14 +66,14 @@ export const MyOrders = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {userOrders.map((order, index) => {
+                                {userOrders.map((order, index) => {                                
                                     const total = userOrders[index].map(x => +x.qty * +x.price).reduce((a,b) => a + b, 0);
                                     return <tr key={index}>
-                                        <td>{orderIds[index]}</td>
-                                        <td>{dates[index]}</td>
+                                        <td>{orderIds[orderIdsCollection[index]]}</td>
+                                        <td>{dates[orderIdsCollection[index]]}</td>
                                         <td>$ {total}</td>
                                         <td>
-                                            <Link to={`/myorders/${orderIds[index]}`}>
+                                            <Link to={`/myorders/${orderIds[orderIdsCollection[index]]}`}>
                                                 Order details
                                             </Link>
                                         </td>

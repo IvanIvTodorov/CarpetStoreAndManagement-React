@@ -1,8 +1,9 @@
+import { Fragment } from 'react'
 import style from './Forbiden.Module.css'
 
 export const Forbiden = () => {
     return (
-        <>
+        <div style={{ minHeight: '551px'}}>
             <title>Access Denied</title>
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta charSet="UTF-8" />
@@ -21,6 +22,6 @@ export const Forbiden = () => {
                 </h3>
                 <h3 className="w3-center w3-animate-zoom">🚫🚫🚫🚫</h3>
             </div>
-        </>
+        </div>
     )
 }
