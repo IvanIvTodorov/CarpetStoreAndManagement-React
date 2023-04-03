@@ -1,11 +1,24 @@
 import style from './Header.Module.css';
 import { Link, useNavigate } from 'react-router-dom'
-import { signOut } from 'firebase/auth';
+import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase'
+import { useEffect, useState } from 'react';
+
 
 
 export const Header = ({ isAuth, setIsAuth, setIsAdmin, isAdmin }) => {
+    const [username, setUsername] = useState('')
+
     let navigate = useNavigate();
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setUsername(auth.currentUser.email)
+            }   
+        })
+    }, [])
+
     const signUserOut = () => {
         signOut(auth)
             .then(() => {
@@ -110,9 +123,16 @@ export const Header = ({ isAuth, setIsAuth, setIsAdmin, isAdmin }) => {
                             </ul>
                             <ul className='right-ul navbar-nav'>
                                 {isAuth ?
-                                    <li>
-                                        <Link to="#" type='button' onClick={signUserOut}>Logout</Link>
-                                    </li>
+                                    <>
+                                        <li style={{ pointerEvents: 'none' }}>
+                                            <Link to="#">Hello,<span style={{ textTransform: 'lowercase' }}> {username ? username : ''}</span>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link to="#" type='button' onClick={signUserOut}>Logout</Link>
+                                        </li>
+                                    </>
+
                                     :
                                     <>
                                         <li>

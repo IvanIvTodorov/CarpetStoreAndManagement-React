@@ -48,8 +48,8 @@ function App() {
       <div style={{
         backgroundColor: 'cornsilk',
       }}>
-        <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} isAdmin={isAdmin} />
-        <main style={{ minHeight: "517px" }}>
+        <Header isAuth={isAuth} setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} isAdmin={isAdmin}/>
+        <main style={{ minHeight: "567px" }}>
           <Routes>
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />} />

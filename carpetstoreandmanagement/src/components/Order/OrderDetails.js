@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -55,12 +55,12 @@ export const OrderDetails = () => {
                                 {Object.values(userOrders).map((order, index) => {
                                     return <Fragment key={index}>
                                         {
-                                            Object.values(order).map((x, index) => {
+                                            Object.entries(order).map((x, index) => {
                                                 return <tr key={index}>
-                                                    <td>{x.name}</td>
-                                                    <td>{x.type}</td>
-                                                    <td>{x.price}</td>
-                                                    <td>{x.qty}</td>
+                                                    <td><Link to={{ pathname: `/details/${x[0]}` }}>{x[1].name}</Link></td>
+                                                    <td>{x[1].type}</td>
+                                                    <td>{x[1].price}</td>
+                                                    <td>{x[1].qty}</td>
                                                 </tr>
                                             })
                                         }

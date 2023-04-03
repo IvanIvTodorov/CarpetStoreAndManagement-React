@@ -97,6 +97,7 @@ export const Cart = ({ setUserProducts, userProducts }) => {
 
         let addOrder = currentData.data().carpets;
 
+
         await addDoc(ordersCollection, {
             [userId]: {...addOrder},
             isCompleted: false,

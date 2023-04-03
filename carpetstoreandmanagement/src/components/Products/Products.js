@@ -102,7 +102,7 @@ export const Products = ({ carpets, setUserProducts}) => {
                                 }
 
                             </div>
-                            <div className="product-content" style={{ border: '1px solid black' }}>
+                            <div className="product-content">
                                 <h3 className="title"  >
                                     <Link to={{ pathname: `/details/${carpet.id}` }}>{carpet.name}</Link>
                                 </h3>
