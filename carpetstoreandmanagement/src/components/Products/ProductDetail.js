@@ -1,17 +1,17 @@
 import style from './ProductDetails.Module.css'
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db, auth } from '../../firebase';
-import { getDoc, doc, deleteDoc, collection, addDoc, updateDoc, setDoc, getDocs, query, where } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc, collection, addDoc, orderBy, setDoc, getDocs, query, where } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext'
 
 
-export const ProductDetail = ({ setCarpets, setUserProducts}) => {
+export const ProductDetail = ({ setCarpets, setUserProducts }) => {
     const [carpet, setCarpet] = useState({})
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
     const { carpetId } = useParams();
-    const {isAdmin, isAuth} = useContext(AuthContext) 
+    const { isAdmin, isAuth } = useContext(AuthContext)
 
     const docRef = doc(db, 'carpet', carpetId);
     let navigate = useNavigate();
@@ -22,10 +22,12 @@ export const ProductDetail = ({ setCarpets, setUserProducts}) => {
             const data = await getDoc(docRef);
             setCarpet({ ...data.data() });
             const curComments = query(commentCollection, where("carpetId", "==", carpetId));
-            const filteredComments = await getDocs(curComments)
+            const commentDocs = await getDocs(curComments);
 
+            let filtered = commentDocs.docs.map(doc => ({ ...doc.data(), commentId: doc.id }));
+            filtered = filtered.sort((x, y) => x.time - y.time);
 
-            setComments(filteredComments.docs.map(doc => ({ ...doc.data(), commentId: doc.id })))
+            setComments(filtered)
         };
 
         getCarpet();
@@ -97,12 +99,15 @@ export const ProductDetail = ({ setCarpets, setUserProducts}) => {
             text: comment,
             carpetId: carpetId,
             userId: auth.currentUser.uid,
-            email: auth.currentUser.email[0].toUpperCase()
+            email: auth.currentUser.email[0].toUpperCase(),
+            time: Date.now()
         }).then(async () => {
             const curComments = query(commentCollection, where("carpetId", "==", carpetId));
-            const filteredComments = await getDocs(curComments)
+            const commentDocs = await getDocs(curComments);
 
-            setComments(filteredComments.docs.map(doc => ({ ...doc.data(), commentId: doc.id })))
+            let filtered = commentDocs.docs.map(doc => ({ ...doc.data(), commentId: doc.id }));
+            filtered = filtered.sort((x, y) => x.time - y.time);
+            setComments(filtered)
             setComment('')
         })
     }
@@ -112,8 +117,11 @@ export const ProductDetail = ({ setCarpets, setUserProducts}) => {
         await deleteDoc(doc(db, 'comments', commentId));
 
         const curComments = query(commentCollection, where("carpetId", "==", carpetId));
-        const filteredComments = await getDocs(curComments)
-        setComments(filteredComments.docs.map(doc => ({ ...doc.data(), commentId: doc.id })))
+        const commentDocs = await getDocs(curComments);
+
+        let filtered = commentDocs.docs.map(doc => ({ ...doc.data(), commentId: doc.id }));
+        filtered = filtered.sort((x, y) => x.time - y.time);
+        setComments(filtered)
     }
 
     return (
