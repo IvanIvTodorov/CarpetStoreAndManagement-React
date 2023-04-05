@@ -1,17 +1,26 @@
 import style from './Register.Module.css'
 
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../firebase'
+import { AuthContext } from '../../contexts/AuthContext';
 
 export const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState("");
     const [rePassword, setRePassword] = useState("");
     const [error, setError] = useState('');
+    const {isAuth} = useContext(AuthContext);
 
     let navigate = useNavigate();
+
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate('/')
+        } 
+    }, []);
 
     const onRegister = e => {
         e.preventDefault();
@@ -26,7 +35,7 @@ export const Register = () => {
                 alert('You have been registrated successfully !')
             })
             .catch(err => {
-                return setError(err.message);
+                return setError(err.message.slice(10));
             });
 
     }

@@ -8,9 +8,9 @@ export const MyOrders = () => {
     const [userOrders, setUserOrders] = useState([])
     const [orderIds, setOrderIds] = useState([]);
     const [dates, setDates] = useState([]);
-    const navigate = useNavigate();
-    const {isAuth} = useContext(AuthContext);
     const [orderIdsCollection, setOrderIdsCollection] = useState([]);
+    const {isAuth} = useContext(AuthContext);
+    const navigate = useNavigate();
     useEffect(() => {
         if (!isAuth) {
             navigate('/login')

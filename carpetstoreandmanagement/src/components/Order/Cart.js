@@ -18,10 +18,10 @@ export const Cart = ({ setUserProducts, userProducts }) => {
             const carpetCollection = collection(db, 'userProducts')
             const data = await getDocs(carpetCollection)
             const document = doc(db, 'userProducts', auth.currentUser.uid)
-            const data2 = await getDoc(document);
+            const userCarpets = await getDoc(document);
 
-            if (data2.data()) {
-                setUserProducts(Object.entries(data2.data().carpets).map((carpet => {
+            if (userCarpets.data()) {
+                setUserProducts(Object.entries(userCarpets.data().carpets).map((carpet => {
                     return {
                         id: carpet[0],
                         ...carpet[1]
@@ -57,14 +57,13 @@ export const Cart = ({ setUserProducts, userProducts }) => {
     }
 
     const increaseAmount = async (value, carpetId) => {
-        if (value.target.value <= 0) {
-            alert("The qty must be higher than 0 !!!")
+        if (value.target.value <= 0 || value.target.value > 999999) {
+            alert("The qty must be higher than 0 and lower than 99999 !!!")
             value.target.value = 1;
         }
 
         const userId = auth.currentUser.uid;
         const document = doc(db, 'userProducts', userId);
-        const information = await getDoc(document);
 
         updateDoc(document, {
             [`carpets.${carpetId}.qty`]: Number(value.target.value)

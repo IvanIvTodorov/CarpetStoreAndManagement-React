@@ -1,18 +1,18 @@
 import style from './Products.Module.css'
 import { Link } from 'react-router-dom';
-import { useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { auth, db } from '../../firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext'
 
 
 
-export const Products = ({ carpets, setUserProducts}) => {
+export const Products = ({ carpets, setUserProducts }) => {
 
     const location = useLocation();
     const path = location.pathname.split('/');
-    const {isAdmin, isAuth} = useContext(AuthContext)
+    const { isAdmin, isAuth } = useContext(AuthContext)
 
 
 
@@ -63,6 +63,8 @@ export const Products = ({ carpets, setUserProducts}) => {
                     }
                 }, { merge: true })
                     .catch(err => { console.log(err) })
+            } else {               
+                return alert('You have already added this product !')
             }
         }
 
@@ -79,10 +81,10 @@ export const Products = ({ carpets, setUserProducts}) => {
     }
 
     return (
-        <div className='container' style={{ minHeight: '567px'}}>
+        <div className='container' style={{ minHeight: '567px' }}>
             <div className="row">
                 {carpets.length > 0 ? carpets.map((carpet) => {
-                    return <div key={carpet.id} className="col-md-3 col-sm-6" style={{marginBottom: '25px', marginTop: '25px'}}>
+                    return <div key={carpet.id} className="col-md-3 col-sm-6" style={{ marginBottom: '25px', marginTop: '25px' }}>
                         <div className="product-grid2">
                             <div className="product-image2">
                                 <Link to={{ pathname: `/details/${carpet.id}` }}>

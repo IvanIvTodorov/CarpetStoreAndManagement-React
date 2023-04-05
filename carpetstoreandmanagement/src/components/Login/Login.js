@@ -3,13 +3,21 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth, provider } from '../../firebase'
 import { signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export const Login = ({ setIsAuth, setIsAdmin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     let navigate = useNavigate();
+    const {isAuth} = useContext(AuthContext);
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate('/')
+        } 
+    }, []);
 
     const signWithGoogle = () => {
         signInWithPopup(auth, provider)

@@ -1,7 +1,7 @@
 import style from './ProductDetails.Module.css'
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db, auth } from '../../firebase';
-import { getDoc, doc, deleteDoc, collection, addDoc, orderBy, setDoc, getDocs, query, where } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc, collection, addDoc, updateDoc, setDoc, getDocs, query, where } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext'
 
@@ -21,8 +21,8 @@ export const ProductDetail = ({ setCarpets, setUserProducts }) => {
         const getCarpet = async () => {
             const data = await getDoc(docRef);
             setCarpet({ ...data.data() });
-            const curComments = query(commentCollection, where("carpetId", "==", carpetId));
-            const commentDocs = await getDocs(curComments);
+            const queryComments = query(commentCollection, where("carpetId", "==", carpetId));
+            const commentDocs = await getDocs(queryComments);
 
             let filtered = commentDocs.docs.map(doc => ({ ...doc.data(), commentId: doc.id }));
             filtered = filtered.sort((x, y) => x.time - y.time);
@@ -77,6 +77,8 @@ export const ProductDetail = ({ setCarpets, setUserProducts }) => {
                     }
                 }, { merge: true })
                     .catch(err => { console.log(err) })
+            } else {               
+                return alert('You have already added this product !')
             }
         }
 
@@ -95,15 +97,17 @@ export const ProductDetail = ({ setCarpets, setUserProducts }) => {
     const sendComment = async (e) => {
         e.preventDefault()
 
+        let timeNow = Date.now();
+
         addDoc(commentCollection, {
             text: comment,
             carpetId: carpetId,
             userId: auth.currentUser.uid,
+            time: timeNow,
             email: auth.currentUser.email[0].toUpperCase(),
-            time: Date.now()
         }).then(async () => {
-            const curComments = query(commentCollection, where("carpetId", "==", carpetId));
-            const commentDocs = await getDocs(curComments);
+            const queryComments = query(commentCollection, where("carpetId", "==", carpetId));
+            const commentDocs = await getDocs(queryComments);
 
             let filtered = commentDocs.docs.map(doc => ({ ...doc.data(), commentId: doc.id }));
             filtered = filtered.sort((x, y) => x.time - y.time);
@@ -116,8 +120,8 @@ export const ProductDetail = ({ setCarpets, setUserProducts }) => {
         e.preventDefault();
         await deleteDoc(doc(db, 'comments', commentId));
 
-        const curComments = query(commentCollection, where("carpetId", "==", carpetId));
-        const commentDocs = await getDocs(curComments);
+        const queryComments = query(commentCollection, where("carpetId", "==", carpetId));
+        const commentDocs = await getDocs(queryComments);
 
         let filtered = commentDocs.docs.map(doc => ({ ...doc.data(), commentId: doc.id }));
         filtered = filtered.sort((x, y) => x.time - y.time);

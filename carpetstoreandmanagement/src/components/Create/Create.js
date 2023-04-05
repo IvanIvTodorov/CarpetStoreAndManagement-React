@@ -14,6 +14,15 @@ export const Create = ({ setCarpets }) => {
     const [error, setError] = useState([]);
     const carpetCollection = collection(db, 'carpet')
     let navigate = useNavigate();
+    const { isAdmin, isAuth } = useContext(AuthContext)
+
+    useEffect(() => {
+        if (isAuth && !isAdmin) {
+            navigate('/forbiden')
+        } else if (!isAdmin || !isAuth) {
+            navigate('/login')
+        }
+    }, []);
 
     const onPost = async (e) => {
         e.preventDefault();
@@ -27,8 +36,8 @@ export const Create = ({ setCarpets }) => {
             errMsg.push('Type length should be between 0 and 10')
         }
 
-        if (!price || !Number(price) || Number(price) <= 0) {
-            errMsg.push('Price should be a positive number')
+        if (!price || !Number(price) || Number(price) <= 0 || Number(price) > 1000) {
+            errMsg.push('Price should be in a range from 1 to 1000')
         }
 
         if (!imgUrl || imgUrl.length <= 0) {
@@ -55,15 +64,6 @@ export const Create = ({ setCarpets }) => {
         })
     }
 
-    const { isAdmin, isAuth } = useContext(AuthContext)
-
-    useEffect(() => {
-        if (isAuth && !isAdmin) {
-            navigate('/forbiden')
-        } else if (!isAdmin || !isAuth) {
-            navigate('/login')
-        }
-    }, []);
 
     return (
         <>{error.length > 0 && error &&

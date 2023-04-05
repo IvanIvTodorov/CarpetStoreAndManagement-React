@@ -51,9 +51,8 @@ export const Edit = ({setCarpets}) => {
         if (!type || type.current.value.length <= 0 || type.current.value.length > 10) {
             errMsg.push('Type length should be between 0 and 10')
         }
-
-        if (!price || !Number(price.current.value) || Number(price.current.value) <= 0) {
-            errMsg.push('Price should be a positive number')
+        if (!price || !Number(price.current.value) || Number(price.current.value) <= 0 || Number(price.current.value) > 1000) {
+            errMsg.push('Price should be in a range from 1 to 1000')
         }
 
         if (!imgUrl || imgUrl.current.value.length <= 0) {

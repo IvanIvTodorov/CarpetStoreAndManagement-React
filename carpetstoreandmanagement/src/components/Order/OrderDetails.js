@@ -18,7 +18,6 @@ export const OrderDetails = () => {
         const getCarpets = async () => {
             const orderRef = doc(db, 'orders', orderId)
             const document = await getDoc(orderRef);
-            const status = [];
 
             const data = document.data();
             setOrderStatus(data.isCompleted);

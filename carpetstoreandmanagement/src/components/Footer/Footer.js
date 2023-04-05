@@ -5,13 +5,23 @@ export const Footer = () => {
         <footer>
             <div className="bottom section-padding">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-md-12 text-center">
-                            <div className="copyright">
-                                <p> © <span>2023</span>{" "}
-                                    CarpetStoreAndManagement
-                                </p>
-                            </div>
+                    <div className="d-flex justify-content-between">
+
+                        <div className='copyright'>
+                            <p> © <span>2023</span>{" "}
+                                CarpetStoreAndManagement
+                            </p>
+                        </div>
+                        <div className='copyright'>
+                            <p> Adress:
+                                Sliven, Bul. Hadzhi Dimitar 42
+                            </p>
+                        </div>
+                        <div className='copyright'>
+                            <p>Call us: <a href='tel:+35955555555' style={{color: 'black'}}> 
+                                    +35955555555
+                                </a>                      
+                            </p>
                         </div>
                     </div>
                 </div>
