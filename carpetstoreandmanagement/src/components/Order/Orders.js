@@ -22,7 +22,8 @@ export const Orders = () => {
         const carpetCollection = query(collection(db, "orders"), where("isCompleted", "==", false));
         const data = await getDocs(carpetCollection)
 
-        const curOrders = data.docs.map((d) => ({ ...d.data() }));
+        let curOrders = data.docs.map((d) => ({ ...d.data() }));
+        curOrders.sort((x, y) => x.time - y.time);
 
         const filteredOrders = [];
         for (let index = 0; index < curOrders.length; index++) {
@@ -30,6 +31,7 @@ export const Orders = () => {
             const el = curOrders[index];
             delete el.isCompleted;
             delete el.dateOforder;
+            delete el.time;
             filteredOrders.push(el);
         }
 
@@ -67,6 +69,7 @@ export const Orders = () => {
         const filter = document.data();
         delete filter.dateOforder;
         delete filter.isCompleted;
+        delete filter.time;
         let arr = [];
         let arrQty = [];
         Object.values(filter).map(x => (Object.values(x).map((z, index) => ({
@@ -84,10 +87,8 @@ export const Orders = () => {
             if (!carpet) {
                 return alert(alertMsg + arr[index])
             }
-            delete carpet.name;
-            delete carpet.type;
-            const invQty = carpet.qty;
 
+            const invQty = carpet.qty;
 
             if (invQty < arrQty[index]) {
                 alertMsg = alertMsg + arr[index]
@@ -104,10 +105,6 @@ export const Orders = () => {
                 const docRef = doc(db, 'inventory', arr[index])
                 const docToUpdate = await getDoc(docRef);
                 const filter = docToUpdate.data();
-                delete filter.isCompleted
-                delete filter.dateOforder
-                delete filter.name
-                delete filter.type
 
                 const orderQty = Number(arrQty[index]);
                 const newQty = filter.qty - orderQty;

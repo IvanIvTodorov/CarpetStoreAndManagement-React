@@ -16,7 +16,7 @@ export const MyOrders = () => {
             navigate('/login')
         }
         const getOrders = async () => {
-            const carpetCollection = query(collection(db, 'orders'), orderBy("dateOforder"))
+            const carpetCollection = query(collection(db, 'orders'), orderBy("time"))
             const data = await getDocs(carpetCollection)
             const userId = auth.currentUser.uid;
             setOrderIds(data.docs.map(d => d.id))
@@ -31,6 +31,7 @@ export const MyOrders = () => {
                 delete el.isCompleted;
                 dateOforders.push(el.dateOforder);
                 delete el.dateOforder;
+                delete el.time;
 
                 if (el.hasOwnProperty(userId)) {
 

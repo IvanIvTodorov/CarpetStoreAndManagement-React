@@ -97,7 +97,7 @@ export const ProductDetail = ({ setCarpets, setUserProducts }) => {
     const sendComment = async (e) => {
         e.preventDefault()
 
-        let timeNow = Date.now();
+        let timeNow = Date.now(); 
 
         addDoc(commentCollection, {
             text: comment,
@@ -182,7 +182,7 @@ export const ProductDetail = ({ setCarpets, setUserProducts }) => {
             </div>
             {isAuth &&
                 <div className="container my-2">
-                    <h1 style={{ textAlign: 'center' }}>Leave a comment</h1>
+                    <h1 style={{ textAlign: 'center' }}>Reviews</h1>
                     <div className="row mt-4 d-flex justify-content-center">
                         <div className="col-md-9">
                             <form className=" reply-form ">

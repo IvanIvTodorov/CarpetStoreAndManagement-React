@@ -23,6 +23,7 @@ export const OrderDetails = () => {
             setOrderStatus(data.isCompleted);
             delete data.isCompleted
             delete data.dateOforder
+            delete data.time;
 
 
             setUserOrders(data)
@@ -56,7 +57,7 @@ export const OrderDetails = () => {
                                         {
                                             Object.entries(order).map((x, index) => {
                                                 return <tr key={index}>
-                                                    <td><Link to={{ pathname: `/details/${x[0]}` }}>{x[1].name}</Link></td>
+                                                    <td><Link style={{color: 'black'}} to={{ pathname: `/details/${x[0]}` }}>{x[1].name}</Link></td>
                                                     <td>{x[1].type}</td>
                                                     <td>{x[1].price}</td>
                                                     <td>{x[1].qty}</td>

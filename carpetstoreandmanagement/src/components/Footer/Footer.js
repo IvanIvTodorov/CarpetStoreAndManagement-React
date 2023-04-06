@@ -18,8 +18,8 @@ export const Footer = () => {
                             </p>
                         </div>
                         <div className='copyright'>
-                            <p>Call us: <a href='tel:+35955555555' style={{color: 'black'}}> 
-                                    +35955555555
+                            <p>Call us: <a href='tel:+359555555555' style={{color: 'black'}}> 
+                                    +359 555 555 555
                                 </a>                      
                             </p>
                         </div>

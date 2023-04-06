@@ -1,7 +1,6 @@
 export const Home = () => {
     return (
         <>
-            <h1 className="text-center">Welcome to our carpet store!</h1>
             <div className="d-flex align-items-center justify-content-around" style={{minHeight: "511px"}}>
                 <div className="col-md-4 how-img">
                     <img

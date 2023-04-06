@@ -100,7 +100,8 @@ export const Cart = ({ setUserProducts, userProducts }) => {
         await addDoc(ordersCollection, {
             [userId]: {...addOrder},
             isCompleted: false,
-            dateOforder: new Date().toLocaleDateString("de-DE")
+            dateOforder: new Date().toLocaleDateString("de-DE"),
+            time: Date.now()
         });
 
         await deleteDoc(document)
