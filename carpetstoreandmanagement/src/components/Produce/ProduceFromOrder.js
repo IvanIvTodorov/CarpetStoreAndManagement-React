@@ -9,7 +9,8 @@ export const ProduceFromOrder = () => {
     const [orderItems, setOrderItems] = useState([]);
     const navigate = useNavigate();
     const { isAdmin, isAuth } = useContext(AuthContext);
-    
+    const [error, setError] = useState([]);
+
     useEffect(() => {
         if (isAuth && !isAdmin) {
             navigate('/forbiden')
@@ -43,22 +44,22 @@ export const ProduceFromOrder = () => {
         const warpRef = doc(db, 'rawMaterials', 'warp');
         const warpDocument = await getDoc(warpRef);
 
-        let alertMsg = 'You need to buy more ';
+        let alertMsg = [];
         if (Number(qty) > Number(Object.values(yarnDocument.data())[0])) {
-            alertMsg = alertMsg + "yarn "
+            alertMsg.push('You do not have enough yarn');
 
         };
 
         if (Number(qty) > Number(Object.values(weftDocument.data())[0])) {
-            alertMsg = alertMsg + "weft "
+            alertMsg.push('You do not have enough weft');
         };
 
         if (Number(qty) > Number(Object.values(warpDocument.data())[0])) {
-            alertMsg = alertMsg + "warp "
+            alertMsg.push('You do not have enough warp');
         };
 
-        if (alertMsg.includes('yarn') || alertMsg.includes('weft') || alertMsg.includes('warp')) {
-            alert(alertMsg)
+        if (alertMsg.length > 0) {
+            setError(alertMsg)
             return;
         }
 
@@ -69,7 +70,8 @@ export const ProduceFromOrder = () => {
             await setDoc(doc(db, 'inventory', carpetId), {
                 qty: Number(qty),
                 name: carpetName,
-                type: carpetType
+                type: carpetType,
+                id: carpetId
             })
                 .catch(err => { console.log(err) })
         } else {
@@ -97,57 +99,69 @@ export const ProduceFromOrder = () => {
             qty: Number(Object.values(warpDocument.data())[0] - Number(qty))
         });
 
+        setError([]);
         return alert(`You hace successfully produced ${qty} pcs of ${carpetName}`)
     }
 
     return (
-        <div className="container" style={{ minHeight: '567px' }}>
-            <div className="row d-flex justify-content-center">
-                <div className="col-sm-12 col-md-10 col-md-offset-1">
-                    <table className="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {orderItems.map((x, index) => {
-                                return <Fragment key={index}>
-                                    {x.map((carpet, index) => {
-                                        return <tr key={index}>
-                                            <td className="col-sm-1 col-md-1">
-                                                <div className="media justify-content-center">
-                                                    <Link className="thumbnail pull-left" to={`/details/${carpet.id}`}>
-                                                        {" "}
-                                                        <img
-                                                            className="media-object"
-                                                            src={carpet.imgUrl}
-                                                            style={{ width: 72, height: 72 }}
-                                                        />{" "}
-                                                    </Link>
-                                                </div>
-                                            </td>
-                                            <td className="col-sm-8 col-md-6">{carpet.name}</td>
-                                            <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
-                                                <span>{carpet.qty}</span>
-                                            </td>
-                                            <td className="col-sm-1 col-md-1">
-                                                <button onClick={e => produceItem(e, carpet.id, carpet.qty, carpet.name, carpet.type)} type="button" className="btn btn-success">
-                                                    <span className="glyphicon glyphicon-remove" /> Produce
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    })}
-                                </Fragment>
-                            })}
+        <>{error.length > 0 && error &&
+            <div className="alert alert-danger text-center">
+                {error.map((e, index) => {
+                    return <Fragment key={index}>
+                        <strong>{e}</strong>
+                        <br />
+                    </Fragment>
+                })}
+            </div>
+        }
+            <div className="container" style={{ minHeight: '567px' }}>
+                <div className="row d-flex justify-content-center">
+                    <div className="col-sm-12 col-md-10 col-md-offset-1">
+                        <table className="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orderItems.map((x, index) => {
+                                    return <Fragment key={index}>
+                                        {x.map((carpet, index) => {
+                                            return <tr key={index}>
+                                                <td className="col-sm-1 col-md-1">
+                                                    <div className="media justify-content-center">
+                                                        <Link className="thumbnail pull-left" to={`/details/${carpet.id}`}>
+                                                            {" "}
+                                                            <img
+                                                                className="media-object"
+                                                                src={carpet.imgUrl}
+                                                                style={{ width: 72, height: 72 }}
+                                                            />{" "}
+                                                        </Link>
+                                                    </div>
+                                                </td>
+                                                <td className="col-sm-8 col-md-6">{carpet.name}</td>
+                                                <td className="col-sm-1 col-md-1" style={{ textAlign: "center" }}>
+                                                    <span>{carpet.qty}</span>
+                                                </td>
+                                                <td className="col-sm-1 col-md-1">
+                                                    <button onClick={e => produceItem(e, carpet.id, carpet.qty, carpet.name, carpet.type)} type="button" className="btn btn-success">
+                                                        <span className="glyphicon glyphicon-remove" /> Produce
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        })}
+                                    </Fragment>
+                                })}
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };

@@ -22,13 +22,15 @@ export const Orders = () => {
         const carpetCollection = query(collection(db, "orders"), where("isCompleted", "==", false));
         const data = await getDocs(carpetCollection)
 
-        let curOrders = data.docs.map((d) => ({ ...d.data() }));
+        let curOrders = data.docs.map((d) => ({ ...d.data(), id: d.id }));
         curOrders.sort((x, y) => x.time - y.time);
 
         const filteredOrders = [];
+        const orderIds = []
         for (let index = 0; index < curOrders.length; index++) {
 
             const el = curOrders[index];
+            orderIds.push(el.id)
             delete el.isCompleted;
             delete el.dateOforder;
             delete el.time;
@@ -41,11 +43,6 @@ export const Orders = () => {
             id: Object.keys(y[1])[index],
             ...z
         })))[0]);
-
-        const orderIds = []
-        for (let index = 0; index < data.docs.length; index++) {
-            orderIds.push(data.docs[index].id)
-        }
 
         setOrdersId(orderIds)
         setOrders(mapped)

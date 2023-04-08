@@ -30,7 +30,6 @@ export const Register = () => {
         }
         createUserWithEmailAndPassword(auth, email, password)
             .then(user => {
-                console.log(user);
                 navigate('/login');
                 alert('You have been registrated successfully !')
             })

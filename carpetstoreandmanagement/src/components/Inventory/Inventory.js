@@ -2,7 +2,7 @@ import { Fragment, useContext, useEffect, useState } from 'react';
 import { db } from '../../firebase';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { AuthContext } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export const Inventory = () => {
     const [carpets, setCarpets] = useState([]);
@@ -54,7 +54,7 @@ export const Inventory = () => {
                             <tbody>
                                 {carpets.map((x, index) => {
                                     return <tr key={index}>
-                                        <td>{x.name}</td>
+                                        <td><Link style={{color: 'black'}} to={{ pathname: `/details/${x.id}` }}>{x.name}</Link></td>
                                         <td className="col-sm-5 col-md-5">{x.type}</td>
                                         <td className="col-sm-1 col-md-1">{x.qty}</td>
                                     </tr>
